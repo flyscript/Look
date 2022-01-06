@@ -1,0 +1,511 @@
+/*
+ * Copyright (c) 2016 Samsung Electronics Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+collections {
+   group {
+   		name: "layout_module_second";
+   		images {
+        	image: "watch_hand_sec.png" COMP;
+        	image: "watch_hand_sec_shadow.png" COMP;
+        	image: "watch_hand_sec_ambient.png" COMP;
+   		}
+   		parts {   			
+   			part { name: "second_hand_shadow";
+   				type: IMAGE;   				
+	            description { state: "default" 0.0;
+	               rel1 { relative: 0.02 0.02; to: "second_hand"; }
+	               rel2 { relative: 1.02 1.02; to: "second_hand"; }
+	               min: 30 360;
+	               max: 30 360;
+	               color: 255 255 255 191;
+	               image { normal: "watch_hand_sec_shadow.png"; }
+	               map
+	               {
+	                  on: 1;
+	                  smooth: 1;
+	                  perspective_on: 1;
+	                  rotation
+	                  {
+	                     z: 0;
+	                     x: 0;
+	                     y: 0;
+	                  }
+	               }
+	            }
+	            description { state: "second_ticked" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 360;
+	            }
+	            description { state: "second_ambient" 0.0;
+	               inherit: "default" 0.0;
+	               color: 0 0 0 0;
+	            }
+            }
+   			part { name: "second_hand";
+   				type: IMAGE;   				
+	            description { state: "default" 0.0;
+	               rel1 { relative: 0.0 0.0; }
+	               rel2 { relative: 1.0 1.0; }
+	               min: 30 360;
+	               max: 30 360;
+	               image { normal: "watch_hand_sec.png"; }
+	               map
+	               {
+	                  on: 1;
+	                  smooth: 1;
+	                  perspective_on: 1;
+	                  rotation
+	                  {
+	                     z: 0;
+	                     x: 0;
+	                     y: 0;
+	                  }
+	               }
+	            }
+	            description { state: "second_ticked" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 360;
+	            }
+	            description { state: "second_ambient" 0.0;
+	               inherit: "default" 0.0;
+	               color: 0 0 0 0;
+	            }
+   			}
+   		}
+   		programs {
+		   program 
+		   { 
+		      name: "second_tick";
+		      signal: "second_tick";
+		      source: "*";
+		      action: STATE_SET "second_ticked" 0.0;
+		      target: "second_hand";
+		      target: "second_hand_shadow";
+		      transition: LINEAR 60.0;
+		      after: "second_reset_tick";
+		   }		  
+		   program
+		   {
+		      name: "second_reset_tick";
+		      signal: "second_reset_tick";
+		      source: "*";
+		      action: STATE_SET "default" 0.0;
+		      target: "second_hand";
+		      target: "second_hand_shadow";
+		      transition: LINEAR 0.0;
+		      after: "second_tick";
+		   }
+		   program
+		   {
+		      name: "second_start_tick";
+		      signal: "second_start_tick";
+		      source: "*";
+			   action: ACTION_STOP;
+			   target: "second_tick";
+			   after: "second_reset_tick";
+		   }
+		   program
+		   {
+		      name: "second_stop_tick";
+		      signal: "second_stop_tick";
+		      source: "*";
+			   action: ACTION_STOP;
+			   target: "second_reset_tick";
+			   target: "second_tick";
+		   }
+		   program 
+		   { 
+		      name: "second_set_ambient";
+		      signal: "second_set_ambient";
+		      source: "*";
+		      action: STATE_SET "second_ambient" 0.0;
+		      target: "second_hand";
+		      target: "second_hand_shadow";
+		      transition: LINEAR 0.0;
+		      after: "second_stop_tick";
+		   }
+      }
+   }
+   
+   group {
+   		name: "layout_module_minute";
+   		images {
+        	image: "watch_hand_min.png" COMP;
+        	image: "watch_hand_min_shadow.png" COMP;
+        	image: "watch_hand_min_ambient.png" COMP;
+   		}
+   		parts {   			
+   			part { name: "minute_hand_shadow";
+   				type: IMAGE;   				
+	            description { state: "default" 0.0;
+	               rel1 { relative: 0.03 0.03; to: "minute_hand"; }
+	               rel2 { relative: 1.03 1.03; to: "minute_hand"; }
+	               min: 30 360;
+	               max: 30 360;
+	               color: 255 255 255 191;
+	               image { normal: "watch_hand_min_shadow.png"; }
+	               map
+	               {
+	                  on: 1;
+	                  smooth: 1;
+	                  perspective_on: 1;
+	                  rotation
+	                  {
+	                     z: 0;
+	                     x: 0;
+	                     y: 0;
+	                  }
+	               }
+	            }
+	            description { state: "minute_ticked" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 6;
+	            }
+	            description { state: "minute_ambient" 0.0;
+	               inherit: "default" 0.0;
+	               color: 0 0 0 0;
+	            }
+            }
+   			part { name: "minute_hand";
+   				type: IMAGE;   				
+	            description { state: "default" 0.0;
+	               rel1 { relative: 0.0 0.0; }
+	               rel2 { relative: 1.0 1.0; }
+	               min: 30 360;
+	               max: 30 360;
+	               image { normal: "watch_hand_min.png"; }
+	               map
+	               {
+	                  on: 1;
+	                  smooth: 1;
+	                  perspective_on: 1;
+	                  rotation
+	                  {
+	                     z: 0;
+	                     x: 0;
+	                     y: 0;
+	                  }
+	               }
+	            }
+	            description { state: "minute_ticked" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 6;
+	               image { normal: "watch_hand_min.png"; }
+	            }
+	            description { state: "minute_ambient" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 0;
+	               image { normal: "watch_hand_min_ambient.png"; }
+	            }
+   			}
+   		}
+   		programs {
+		   program 
+		   { 
+		      name: "minute_tick";
+		      signal: "minute_tick";
+		      source: "*";
+		      action: STATE_SET "minute_ticked" 0.0;
+		      target: "minute_hand";
+		      target: "minute_hand_shadow";
+		      transition: LINEAR 60.0;
+		      after: "minute_reset_tick";
+		   }		  
+		   program
+		   {
+		      name: "minute_reset_tick";
+		      signal: "minute_reset_tick";
+		      source: "*";
+		      action: STATE_SET "default" 0.0;
+		      target: "minute_hand";
+		      target: "minute_hand_shadow";
+		      transition: LINEAR 0.0;
+		      after: "minute_tick";
+		   }
+		   program
+		   {
+		      name: "minute_start_tick";
+		      signal: "minute_start_tick";
+		      source: "*";
+			   action: ACTION_STOP;
+			   target: "minute_tick";
+			   after: "minute_reset_tick";
+		   }
+		   program
+		   {
+		      name: "minute_stop_tick";
+		      signal: "minute_stop_tick";
+		      source: "*";
+			   action: ACTION_STOP;
+			   target: "minute_reset_tick";
+			   target: "minute_tick";
+		   }
+		   program 
+		   { 
+		      name: "minute_set_ambient";
+		      signal: "minute_set_ambient";
+		      source: "*";
+		      action: STATE_SET "minute_ambient" 0.0;
+		      target: "minute_hand";
+		      target: "minute_hand_shadow";
+		      transition: LINEAR 0.0;
+		      after: "minute_stop_tick";
+		   }
+      }
+   }
+   
+   group {
+   	  name: "watch_main";
+      images {
+         image: "watch_bg.png" COMP;
+         image: "watch_bg_ambient.png" COMP;
+         image: "watch_day_num_bg.png" COMP;
+         image: "watch_day_num_bg_ambient.png" COMP;
+         image: "watch_day_num_fg.png" COMP;
+      }
+      parts {
+         part { name: "day_num_bg";
+            type: IMAGE;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.5 0.0; to: "watch_bg"; }
+               rel2 { relative: 0.5 0.0; to: "watch_bg"; }
+               min: 100 100;
+               max: 100 100;
+               image { normal: "watch_day_num_bg.png"; }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 5.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -5.0;               
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               image { normal: "watch_day_num_bg_ambient.png"; }
+            }
+         }
+         part { name: "txt.day.num";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.475 0.325; to: "day_num_bg"; }
+               rel2 { relative: 0.475 0.325; to: "day_num_bg"; }
+               align: 0.45 0.3;
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 20;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "7";
+               }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                  	 center: "day_num_bg";
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 0.4;               
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 5.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -5.0;               
+            }
+         }
+         part { name: "txt.day.txt";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.5 0.7; to: "day_num_bg"; }
+               rel2 { relative: 0.5 0.7; to: "day_num_bg"; }
+               align: 0.5 0.75;
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 18;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "7";
+               }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                  	 center: "day_num_bg";
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 5.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -5.0;               
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               color: 108 255 108 255;
+            }
+         }
+      	 part { name: "watch_bg";
+      	 	type: IMAGE;
+      	 	description { state: "default" 0.0;
+               rel1 { relative: 0.0 0.0; }
+               rel2 { relative: 1.0 1.0; }     
+               min: 360 360;
+               max: 360 360;
+               image { normal: "watch_day_num_bg.png"; }
+      	 	}
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               image { normal: "watch_bg_ambient.png"; }
+            }
+      	 }
+      }
+      programs {
+       program
+       {
+       		name: "jiggle";
+   			signal: "mouse,clicked,1";
+       		source: "*";
+       		action: STATE_SET "jiggle" 0.0;
+       		target: "day_num_bg";
+	      	target: "txt.day.txt";
+	      	target: "txt.day.num";
+	      	transition: SPRING 1.0 2.5 2;
+       		after: "jiggle_back";
+       }
+       program
+       {
+       		name: "jiggle_back";
+   			signal: "jiggle_back";
+       		source: "*";
+       		action: STATE_SET "jiggle_back" 0.0;
+       		target: "day_num_bg";
+	      	target: "txt.day.txt";
+	      	target: "txt.day.num";
+	      	transition: SPRING 1.0 2.5 2;
+       		after: "reset_jiggle";
+       }
+       program
+       {
+       		name: "reset_jiggle";
+       		signal: "reset_jiggle";
+       		source: "*";
+       		action: STATE_SET "default" 0.0;
+       		target: "day_num_bg";
+	      	target: "txt.day.txt";
+	      	target: "txt.day.num";
+	      	transition: SPRING 2.0 2.0 4;
+       		
+       }
+	   program 
+	   { 
+	      name: "set_ambient";
+	      signal: "set_ambient";
+	      source: "*";
+	      action: STATE_SET "ambient" 0.0;
+	      target: "watch_bg";
+	      target: "day_num_bg";
+	      target: "txt.day.txt";
+	      target: "txt.day.num";
+	      transition: LINEAR 0.0;
+	   }
+	   program 
+	   { 
+	      name: "set_default";
+	      signal: "set_default";
+	      source: "*";
+	      action: STATE_SET "default" 0.0;
+	      target: "watch_bg";
+	      target: "day_num_bg";
+	      target: "txt.day.txt";
+	      target: "txt.day.num";
+	      transition: LINEAR 0.0;
+	   }
+      }
+   } //group end
+   
+   /*
+   group { name: "layout_module_month";
+      images {
+         image: "watch_calendar_module_month.png" COMP;
+      }
+      parts {
+         part { name: "day_bg";
+            type: IMAGE;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.0 0.0; }
+               rel2 { relative: 1.0 1.0; }
+               min: 128 128;
+               max: 128 128;
+               image { normal: "watch_calendar_module_month.png"; }
+            }
+         }
+      } //parts end
+   } //group end
+   group { name: "layout_module_weekday";
+      images {
+         image: "watch_calendar_module_day.png" COMP;
+      }
+      parts {
+         part { name: "day_bg";
+            type: IMAGE;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.0 0.0; }
+               rel2 { relative: 1.0 1.0; }
+               min: 128 128;
+               max: 128 128;
+               image { normal: "watch_calendar_module_day.png"; }
+            }
+         }
+      } //parts end
+   } //group end
+   */
+} //collections end
