@@ -1,0 +1,11 @@
+# Signing
+.sign
+author-signature.xml
+signature1.xml
+
+# Builds
+[Dd]ebug
+*.tpk
+
+# Reports
+SA_Report
