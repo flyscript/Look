@@ -23,15 +23,58 @@
 #include "view.h"
 
 static struct view_info {
+	Evas_Object *background;
 	Evas_Object *watchface;
 	Evas_Object *module_second_layout;
 	Evas_Object *module_minute_layout;
 } s_info = {
+	.background = NULL,
 	.watchface = NULL,
 	.module_second_layout = NULL,
 	.module_minute_layout = NULL,
 };
 
+
+/**
+ * @breif Create a bg object for the watch
+ * @param[in] win The window object
+ * @param[in] image_path The image path for bg
+ * @param[in] width The width size of bg
+ * @param[in] height The height size of bg
+ */
+Evas_Object *view_create_background(Evas_Object *win, const char *image_path, int width, int height)
+{
+	Evas_Object *bg = NULL;
+	Eina_Bool ret = EINA_FALSE;
+
+	if (win == NULL) {
+		dlog_print(DLOG_ERROR, LOG_TAG, "window is NULL");
+		return NULL;
+	}
+
+	bg = elm_bg_add(win);
+	if (bg == NULL) {
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to add bg");
+		return NULL;
+	}
+
+	ret = elm_bg_file_set(bg, image_path, NULL);
+	if (ret != EINA_TRUE) {
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
+		evas_object_del(bg);
+		return NULL;
+	}
+
+	elm_bg_option_set(bg, ELM_BG_OPTION_CENTER);
+
+	evas_object_move(bg, 0, 0);
+	evas_object_resize(bg, width, height);
+	evas_object_show(bg);
+
+	s_info.background = bg;
+
+	return bg;
+}
 
 /**
  * @brief Set the module day layout.
@@ -74,6 +117,13 @@ void view_set_module_minute_layout(Evas_Object *layout)
 	s_info.module_minute_layout = layout;
 }
 
+/**
+ * @brief Get the background object.
+ */
+Evas_Object *view_get_bg(void)
+{
+	return s_info.background;
+}
 
 /**
  * @brief Get the watchface object.
@@ -285,7 +335,7 @@ Evas_Object *view_create_parts(Evas_Object *parent, const char *image_path, int 
 	Eina_Bool ret = EINA_FALSE;
 
 	if (parent == NULL) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "watchface is NULL");
+		dlog_print(DLOG_ERROR, LOG_TAG, "background is NULL");
 		return NULL;
 	}
 
@@ -314,26 +364,32 @@ Evas_Object *view_create_parts(Evas_Object *parent, const char *image_path, int 
  */
 void view_destroy_base_gui(void)
 {
+	if (s_info.watchface) {
+		evas_object_del(s_info.watchface);
+		s_info.watchface = NULL;
+	}
+
 	if (s_info.module_second_layout) {
 		evas_object_del(s_info.module_second_layout);
 		s_info.module_second_layout = NULL;
 	}
+
 	if (s_info.module_minute_layout) {
 		evas_object_del(s_info.module_minute_layout);
 		s_info.module_minute_layout = NULL;
 	}
 
-	if (s_info.watchface) {
-		evas_object_data_del(s_info.watchface, "__HANDS_MIN__");
-		evas_object_data_del(s_info.watchface, "__HANDS_HOUR__");
-		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_MONTH__");
-		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_WEEKDAY__");
-		evas_object_data_del(s_info.watchface, "__HANDS_SEC_SHADOW__");
-		evas_object_data_del(s_info.watchface, "__HANDS_MIN_SHADOW__");
-		evas_object_data_del(s_info.watchface, "__HANDS_HOUR_SHADOW__");
-		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_MONTH_SHADOW__");
-		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_WEEKDAY_SHADOW__");
-		evas_object_del(s_info.watchface);
-		s_info.watchface = NULL;
+	if (s_info.background) {
+		evas_object_data_del(s_info.background, "__HANDS_MIN__");
+		evas_object_data_del(s_info.background, "__HANDS_HOUR__");
+		evas_object_data_del(s_info.background, "__HANDS_MODULE_MONTH__");
+		evas_object_data_del(s_info.background, "__HANDS_MODULE_WEEKDAY__");
+		evas_object_data_del(s_info.background, "__HANDS_SEC_SHADOW__");
+		evas_object_data_del(s_info.background, "__HANDS_MIN_SHADOW__");
+		evas_object_data_del(s_info.background, "__HANDS_HOUR_SHADOW__");
+		evas_object_data_del(s_info.background, "__HANDS_MODULE_MONTH_SHADOW__");
+		evas_object_data_del(s_info.background, "__HANDS_MODULE_WEEKDAY_SHADOW__");
+		evas_object_del(s_info.background);
+		s_info.background = NULL;
 	}
 }
