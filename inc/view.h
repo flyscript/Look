@@ -19,12 +19,14 @@
 
 #define EDJ_FILE "edje/main.edj"
 
-void view_set_module_watchface_layout(Evas_Object *layout);
+void view_set_module_day_layout(Evas_Object *layout);
 void view_set_module_second_layout(Evas_Object *layout);
 void view_set_module_minute_layout(Evas_Object *layout);
-Evas_Object *view_get_watchface(void);
+Evas_Object *view_get_module_day_layout(void);
 Evas_Object *view_get_module_second_layout(void);
 Evas_Object *view_get_module_minute_layout(void);
+Evas_Object *view_create_watchface(Evas_Object *win, const char *image_path, int width, int height);
+Evas_Object *view_get_watchface(void);
 
 /*
  * Create a view

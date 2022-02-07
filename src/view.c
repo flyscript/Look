@@ -23,13 +23,13 @@
 #include "view.h"
 
 static struct view_info {
-	Evas_Object *background;
 	Evas_Object *watchface;
+	Evas_Object *module_day_layout;
 	Evas_Object *module_second_layout;
 	Evas_Object *module_minute_layout;
 } s_info = {
-	.background = NULL,
 	.watchface = NULL,
+	.module_day_layout = NULL,
 	.module_second_layout = NULL,
 	.module_minute_layout = NULL,
 };
@@ -42,7 +42,7 @@ static struct view_info {
  * @param[in] width The width size of bg
  * @param[in] height The height size of bg
  */
-Evas_Object *view_create_background(Evas_Object *win, const char *image_path, int width, int height)
+Evas_Object *view_create_watchface(Evas_Object *win, const char *image_path, int width, int height)
 {
 	Evas_Object *bg = NULL;
 	Eina_Bool ret = EINA_FALSE;
@@ -71,7 +71,7 @@ Evas_Object *view_create_background(Evas_Object *win, const char *image_path, in
 	evas_object_resize(bg, width, height);
 	evas_object_show(bg);
 
-	s_info.background = bg;
+	s_info.watchface = bg;
 
 	return bg;
 }
@@ -79,14 +79,14 @@ Evas_Object *view_create_background(Evas_Object *win, const char *image_path, in
 /**
  * @brief Set the module day layout.
  */
-void view_set_module_watchface_layout(Evas_Object *layout)
+void view_set_module_day_layout(Evas_Object *layout)
 {
 	if (layout == NULL) {
 		dlog_print(DLOG_ERROR, LOG_TAG, "layout is NULL");
 		return;
 	}
 
-	s_info.watchface = layout;
+	s_info.module_day_layout = layout;
 }
 
 
@@ -120,17 +120,17 @@ void view_set_module_minute_layout(Evas_Object *layout)
 /**
  * @brief Get the background object.
  */
-Evas_Object *view_get_bg(void)
-{
-	return s_info.background;
-}
-
-/**
- * @brief Get the watchface object.
- */
 Evas_Object *view_get_watchface(void)
 {
 	return s_info.watchface;
+}
+
+/**
+ * @brief Get the day layout object.
+ */
+Evas_Object *view_get_module_day_layout(void)
+{
+	return s_info.module_day_layout;
 }
 
 /**
@@ -379,17 +379,17 @@ void view_destroy_base_gui(void)
 		s_info.module_minute_layout = NULL;
 	}
 
-	if (s_info.background) {
-		evas_object_data_del(s_info.background, "__HANDS_MIN__");
-		evas_object_data_del(s_info.background, "__HANDS_HOUR__");
-		evas_object_data_del(s_info.background, "__HANDS_MODULE_MONTH__");
-		evas_object_data_del(s_info.background, "__HANDS_MODULE_WEEKDAY__");
-		evas_object_data_del(s_info.background, "__HANDS_SEC_SHADOW__");
-		evas_object_data_del(s_info.background, "__HANDS_MIN_SHADOW__");
-		evas_object_data_del(s_info.background, "__HANDS_HOUR_SHADOW__");
-		evas_object_data_del(s_info.background, "__HANDS_MODULE_MONTH_SHADOW__");
-		evas_object_data_del(s_info.background, "__HANDS_MODULE_WEEKDAY_SHADOW__");
-		evas_object_del(s_info.background);
-		s_info.background = NULL;
+	if (s_info.watchface) {
+		evas_object_data_del(s_info.watchface, "__HANDS_MIN__");
+		evas_object_data_del(s_info.watchface, "__HANDS_HOUR__");
+		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_MONTH__");
+		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_WEEKDAY__");
+		evas_object_data_del(s_info.watchface, "__HANDS_SEC_SHADOW__");
+		evas_object_data_del(s_info.watchface, "__HANDS_MIN_SHADOW__");
+		evas_object_data_del(s_info.watchface, "__HANDS_HOUR_SHADOW__");
+		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_MONTH_SHADOW__");
+		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_WEEKDAY_SHADOW__");
+		evas_object_del(s_info.watchface);
+		s_info.watchface = NULL;
 	}
 }

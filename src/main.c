@@ -271,69 +271,87 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 {
 	s_info.ambient = ambient_mode;
 
-	Evas_Object *module_layout = NULL;
+	Evas_Object *object = NULL;
 	Evas_Object *hands = NULL;
 	char path[PATH_MAX] = { 0, };
 	int ret = 0;
 
 	if (ambient_mode) // Ambient
 	{
-		//Set Background
-		module_layout = view_get_watchface();
-		edje_object_signal_emit(module_layout,"set_ambient","");
+		// Set Watchface
+		data_get_resource_path(IMAGE_BG_AMBIENT, path, sizeof(path));
+		object = view_get_watchface();
+		ret = elm_bg_file_set(object, path, NULL);
+		if (ret != EINA_TRUE) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
+		}
+
+		//Set Day
+		object = view_get_module_day_layout();
+		edje_object_signal_emit(object,"set_ambient","");
 
 		//Set Second Hand
-		module_layout = view_get_module_second_layout();
-		edje_object_signal_emit(module_layout,"second_set_ambient","");
-		evas_object_hide(module_layout);
+		object = view_get_module_second_layout();
+		edje_object_signal_emit(object,"second_set_ambient","");
+		evas_object_hide(object);
 
 		//Set Minute Hand
-		module_layout = view_get_module_minute_layout();
-		edje_object_signal_emit(module_layout,"minute_set_ambient","");
+		object = view_get_module_minute_layout();
+		edje_object_signal_emit(object,"minute_set_ambient","");
 
 		s_info.smooth_tick = false;
 
 		//Set Hour Hand
-		ret = watch_app_get_elm_win(&module_layout);
+		ret = watch_app_get_elm_win(&object);
 		if (ret != APP_ERROR_NONE) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "failed to get window. err = %d", ret);
 			return;
 		}
 
-		hands = evas_object_data_get(module_layout, "__HANDS_HOUR__");
+		hands = evas_object_data_get(object, "__HANDS_HOUR__");
 		data_get_resource_path(IMAGE_HANDS_HOUR_AMBIENT, path, sizeof(path));
+
 		ret = elm_bg_file_set(hands, path, NULL);
 		if (ret != EINA_TRUE) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the hour hand image");
 		}
-		hands = evas_object_data_get(module_layout, "__HANDS_HOUR_SHADOW__");
+
+		hands = evas_object_data_get(object, "__HANDS_HOUR_SHADOW__");
 		evas_object_hide(hands);
 	}
 	else // Non-ambient
 	{
-		//Set Background
-		module_layout = view_get_watchface();
-		edje_object_signal_emit(module_layout,"set_default","");
+		// Set Watchface
+		data_get_resource_path(IMAGE_BG, path, sizeof(path));
+		object = view_get_watchface();
+		ret = elm_bg_file_set(object, path, NULL);
+		if (ret != EINA_TRUE) {
+			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
+		}
+
+		//Set Day
+		object = view_get_module_day_layout();
+		edje_object_signal_emit(object,"set_default","");
 
 		//Set Second Hand
-		module_layout = view_get_module_second_layout();
-		evas_object_show(module_layout);
+		object = view_get_module_second_layout();
+		evas_object_show(object);
 
 		//Set Hour Hand
-		ret = watch_app_get_elm_win(&module_layout);
+		ret = watch_app_get_elm_win(&object);
 		if (ret != APP_ERROR_NONE) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "failed to get window. err = %d", ret);
 			return;
 		}
 
-		hands = evas_object_data_get(module_layout, "__HANDS_HOUR__");
+		hands = evas_object_data_get(object, "__HANDS_HOUR__");
 		data_get_resource_path(IMAGE_HANDS_HOUR, path, sizeof(path));
 		ret = elm_bg_file_set(hands, path, NULL);
 		if (ret != EINA_TRUE) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the hour hand image");
 		}
 
-		hands = evas_object_data_get(module_layout, "__HANDS_HOUR_SHADOW__");
+		hands = evas_object_data_get(object, "__HANDS_HOUR_SHADOW__");
 		evas_object_show(hands);
 	}
 }
@@ -520,6 +538,7 @@ static void _create_base_gui(int width, int height)
 {
 	Evas_Object *win = NULL;
 	Evas_Object *watchface = NULL;
+	Evas_Object *day_layout = NULL;
 	Evas_Object *module_second_layout = NULL;
 	Evas_Object *module_minute_layout = NULL;
 	Evas_Object *hands_hour = NULL;
@@ -530,9 +549,7 @@ static void _create_base_gui(int width, int height)
 
 	s_info.smooth_tick = false;
 
-	/*
-	 * Get window object
-	 */
+	// Get window object
 	ret = watch_app_get_elm_win(&win);
 	if (ret != APP_ERROR_NONE) {
 		dlog_print(DLOG_ERROR, LOG_TAG, "failed to get window. err = %d", ret);
@@ -541,40 +558,37 @@ static void _create_base_gui(int width, int height)
 	evas_object_resize(win, width, height);
 	evas_object_show(win);
 
-	/*
-	 * Get background image file path
-	 */
+	// Get background image file path
 	data_get_resource_path(IMAGE_BG, bg_path, sizeof(bg_path));
 
-	/*
-	 * Get edje file path
-	 */
+	// Get edje file path
 	data_get_resource_path(EDJ_FILE, edj_path, sizeof(edj_path));
 
-	/*
-	 * Create layout to display day on the watch
-	 */
-	watchface = view_create_module_layout(win, edj_path, "watch_main");
-	if (watchface) {
-		view_set_module_property(watchface, 0, 0, BASE_WIDTH, BASE_HEIGHT);
-		view_set_module_watchface_layout(watchface);
+	// Create watch background
+	watchface = view_create_watchface(win, bg_path, width, height);
+	if (watchface == NULL) {
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to create a watchface");
+		return;
 	}
 
-	/*
-	 * Create layout to display minute hand on the watch
-	 */
+	// Create layout to display day on the watch
+	day_layout = view_create_module_layout(win, edj_path, "watch_main");
+	if (day_layout) {
+		view_set_module_property(day_layout, 0, 0, width, height);
+		view_set_module_day_layout(day_layout);
+	}
+
+	// Minute Hand
 	module_minute_layout = view_create_module_layout(watchface, edj_path, "layout_module_minute");
 	if (module_minute_layout) {
-		view_set_module_property(module_minute_layout, 0, 0, 360, 360);
+		view_set_module_property(module_minute_layout, 0, 0, width, height);
 		view_set_module_minute_layout(module_minute_layout);
 	}
 
-	/*
-	 * Create layout to display second hand on the watch
-	 */
+	// Second Hand
 	module_second_layout = view_create_module_layout(watchface, edj_path, "layout_module_second");
 	if (module_second_layout) {
-		view_set_module_property(module_second_layout, 0, 0, 360, 360);
+		view_set_module_property(module_second_layout, 0, 0, width, height);
 		view_set_module_second_layout(module_second_layout);
 	}
 

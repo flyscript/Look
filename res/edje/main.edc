@@ -270,8 +270,6 @@ collections {
    group {
    	  name: "watch_main";
       images {
-         image: "watch_bg.png" COMP;
-         image: "watch_bg_ambient.png" COMP;
          image: "watch_day_num_bg.png" COMP;
          image: "watch_day_num_bg_ambient.png" COMP;
          image: "watch_day_num_fg.png" COMP;
@@ -280,8 +278,8 @@ collections {
          part { name: "day_num_bg";
             type: IMAGE;
             description { state: "default" 0.0;
-               rel1 { relative: 0.5 0.0; to: "watch_bg"; }
-               rel2 { relative: 0.5 0.0; to: "watch_bg"; }
+               rel1 { relative: 0.75 0.35;}
+               rel2 { relative: 0.75 0.35; }
                min: 100 100;
                max: 100 100;
                image { normal: "watch_day_num_bg.png"; }
@@ -393,20 +391,6 @@ collections {
                color: 108 255 108 255;
             }
          }
-      	 part { name: "watch_bg";
-      	 	type: IMAGE;
-      	 	description { state: "default" 0.0;
-               rel1 { relative: 0.0 0.0; }
-               rel2 { relative: 1.0 1.0; }     
-               min: 360 360;
-               max: 360 360;
-               image { normal: "watch_day_num_bg.png"; }
-      	 	}
-            description { state: "ambient" 0.0;
-               inherit: "default" 0.0;
-               image { normal: "watch_bg_ambient.png"; }
-            }
-      	 }
       }
       programs {
        program
@@ -451,7 +435,6 @@ collections {
 	      signal: "set_ambient";
 	      source: "*";
 	      action: STATE_SET "ambient" 0.0;
-	      target: "watch_bg";
 	      target: "day_num_bg";
 	      target: "txt.day.txt";
 	      target: "txt.day.num";
@@ -463,7 +446,6 @@ collections {
 	      signal: "set_default";
 	      source: "*";
 	      action: STATE_SET "default" 0.0;
-	      target: "watch_bg";
 	      target: "day_num_bg";
 	      target: "txt.day.txt";
 	      target: "txt.day.num";
