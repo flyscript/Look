@@ -349,6 +349,10 @@ collections {
                inherit: "default" 0.0;
                map.rotation.z: -5.0;               
             }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               color: 75 225 75 255;
+            }
          }
          part { name: "txt.day.txt";
             type: TEXT;
@@ -388,7 +392,7 @@ collections {
             }
             description { state: "ambient" 0.0;
                inherit: "default" 0.0;
-               color: 108 255 108 255;
+               color: 75 225 75 255;
             }
          }
          part { name: "day_num_fg";
@@ -414,7 +418,7 @@ collections {
             }
             description { state: "ambient" 0.0;
                inherit: "default" 0.0;
-               image { normal: "watch_day_num_bg_ambient.png"; }
+               color: 0 0 0 0;
             }
          }
       }

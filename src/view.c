@@ -24,11 +24,13 @@
 
 static struct view_info {
 	Evas_Object *bg;
+	Evas_Object *plate;
 	Evas_Object *module_day_layout;
 	Evas_Object *module_second_layout;
 	Evas_Object *module_minute_layout;
 } s_info = {
 	.bg = NULL,
+	.plate = NULL,
 	.module_day_layout = NULL,
 	.module_second_layout = NULL,
 	.module_minute_layout = NULL,
@@ -82,6 +84,14 @@ void view_set_module_minute_layout(Evas_Object *layout)
 Evas_Object *view_get_bg(void)
 {
 	return s_info.bg;
+}
+
+/**
+ * @brief Get the bg plate object.
+ */
+Evas_Object *view_get_bg_plate(void)
+{
+	return s_info.plate;
 }
 
 /**
@@ -193,6 +203,50 @@ Evas_Object *view_create_bg(Evas_Object *win, const char *image_path, int width,
 	s_info.bg = bg;
 
 	return bg;
+}
+
+/**
+ * @breif Create a bg plate object for the watch
+ * @param[in] win The window object
+ * @param[in] image_path The image path for bg
+ * @param[in] width The width size of bg
+ * @param[in] height The height size of bg
+ */
+Evas_Object *view_create_bg_plate(Evas_Object *bg, const char *image_path, int width, int height)
+{
+	Evas_Object *plate = NULL;
+	Eina_Bool ret = EINA_FALSE;
+
+	if (bg == NULL)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "bg is NULL");
+		return NULL;
+	}
+
+	plate = elm_image_add(bg);
+	if (plate == NULL)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to add plate");
+		return NULL;
+	}
+
+	ret = elm_bg_file_set(plate, image_path, NULL);
+	if (ret != EINA_TRUE)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
+		evas_object_del(plate);
+		return NULL;
+	}
+
+	elm_bg_option_set(plate, ELM_BG_OPTION_CENTER);
+
+	evas_object_move(plate, (BASE_WIDTH / 2) - (width / 2), (BASE_HEIGHT / 2) - (width / 2));
+	evas_object_resize(plate, width, height);
+	evas_object_show(plate);
+
+	s_info.plate = plate;
+
+	return plate;
 }
 
 /**
@@ -356,6 +410,12 @@ void view_destroy_base_gui(void)
 		s_info.module_day_layout = NULL;
 	}
 
+	if (s_info.plate)
+	{
+		evas_object_del(s_info.plate);
+		s_info.plate = NULL;
+	}
+
 	if (s_info.bg)
 	{
 		evas_object_data_del(s_info.bg, "__HANDS_SEC__");
@@ -364,6 +424,8 @@ void view_destroy_base_gui(void)
 		evas_object_data_del(s_info.bg, "__HANDS_MIN_SHADOW__");
 		evas_object_data_del(s_info.bg, "__HANDS_HOUR__");
 		evas_object_data_del(s_info.bg, "__HANDS_HOUR_SHADOW__");
+		evas_object_data_del(s_info.bg, "__HANDS_BAT__");
+		evas_object_data_del(s_info.bg, "__HANDS_BAT_SHADOW__");
 		evas_object_del(s_info.bg);
 		s_info.bg = NULL;
 	}

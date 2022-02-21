@@ -21,6 +21,7 @@
 #include <system_settings.h>
 #include <efl_extension.h>
 #include <dlog.h>
+#include <device/battery.h>
 
 #include "look.h"
 #include "view.h"
@@ -46,6 +47,7 @@ static struct main_info {
 
 static void _set_time(int hour, int min, int sec);
 static void _set_date(int day, int month, int day_of_week);
+static void _set_battery(int bat);
 static Evas_Object *_create_parts(parts_type_e type);
 static void _create_base_gui(int width, int height);
 
@@ -233,6 +235,7 @@ void app_time_tick(watch_time_h watch_time, void* user_data)
 	int month = 0;
 	int day = 0;
 	int day_of_week = 0;
+	int battery_level = 0;
 
 	watch_time_get_hour(watch_time, &hour);
 	watch_time_get_minute(watch_time, &min);
@@ -240,10 +243,17 @@ void app_time_tick(watch_time_h watch_time, void* user_data)
 	watch_time_get_day(watch_time, &day);
 	watch_time_get_month(watch_time, &month);
 	watch_time_get_year(watch_time, &year);
-	watch_time_get_day_of_week(watch_time, &day_of_week);
+
+	int ret = device_battery_get_percent(&battery_level);
+	if (ret != 0)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to get battery level");
+		return;
+	}
 
 	_set_time(hour, min, sec);
 	_set_date(day, month, day_of_week);
+	_set_battery(battery_level);
 }
 
 /**
@@ -253,7 +263,7 @@ void app_time_tick(watch_time_h watch_time, void* user_data)
  */
 void app_ambient_tick(watch_time_h watch_time, void* user_data)
 {
-	/* //TODO: Commented out temporarily to disable ambient mode
+	//TODO: Commented out temporarily to disable ambient mode
 	int hour = 0;
 	int min = 0;
 	int year = 0;
@@ -270,7 +280,6 @@ void app_ambient_tick(watch_time_h watch_time, void* user_data)
 
 	_set_time(hour, min, 0);
 	_set_date(day, month, day_of_week);
-	*/
 
 }
 
@@ -284,10 +293,18 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 	 // TODO: Commented out temporarily to disable ambient mode
 	s_info.ambient = ambient_mode;
 
+	Evas_Object *bg = NULL;
 	Evas_Object *object = NULL;
 	Evas_Object *hands = NULL;
 	char path[PATH_MAX] = { 0, };
 	int ret = 0;
+
+	bg = view_get_bg();
+	if (bg == NULL)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to get bg");
+		return;
+	}
 
 	if (ambient_mode) // Ambient
 	{
@@ -295,13 +312,50 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		data_get_resource_path(IMAGE_BG_AMBIENT, path, sizeof(path));
 		object = view_get_bg();
 		ret = elm_bg_file_set(object, path, NULL);
-		if (ret != EINA_TRUE) {
+		if (ret != EINA_TRUE)
+		{
 			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
 		}
+		object = view_get_bg_plate();
+		evas_object_hide(object);
 
 		// Set Day
 		object = view_get_module_day_layout();
 		edje_object_signal_emit(object,"set_ambient","");
+
+		//Set Battery Hand
+		hands = evas_object_data_get(bg, "__HANDS_BAT__");
+		evas_object_hide(hands);
+		hands = evas_object_data_get(bg, "__HANDS_BAT_SHADOW__");
+		evas_object_hide(hands);
+
+		//Set Second Hand
+		hands = evas_object_data_get(bg, "__HANDS_SEC__");
+		evas_object_hide(hands);
+		hands = evas_object_data_get(bg, "__HANDS_SEC_SHADOW__");
+		evas_object_hide(hands);
+
+		//Set Minute Hand
+		data_get_resource_path(IMAGE_HANDS_MIN_AMBIENT, path, sizeof(path));
+		hands = evas_object_data_get(bg, "__HANDS_MIN__");
+		ret = elm_bg_file_set(hands, path, NULL);
+		if (ret != EINA_TRUE)
+		{
+			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
+		}
+		hands = evas_object_data_get(bg, "__HANDS_MIN_SHADOW__");
+		evas_object_hide(hands);
+
+		//Set Hour Hand
+		data_get_resource_path(IMAGE_HANDS_HOUR_AMBIENT, path, sizeof(path));
+		hands = evas_object_data_get(bg, "__HANDS_HOUR__");
+		ret = elm_bg_file_set(hands, path, NULL);
+		if (ret != EINA_TRUE)
+		{
+			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
+		}
+		hands = evas_object_data_get(bg, "__HANDS_HOUR_SHADOW__");
+		evas_object_hide(hands);
 
 		/*
 		//Set Second Hand
@@ -314,62 +368,60 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		edje_object_signal_emit(object,"minute_set_ambient","");
 
 		s_info.smooth_tick = false;
+		 */
 
-		//Set Hour Hand
-		ret = watch_app_get_elm_win(&object);
-		if (ret != APP_ERROR_NONE) {
-			dlog_print(DLOG_ERROR, LOG_TAG, "failed to get window. err = %d", ret);
-			return;
-		}
-
-		hands = evas_object_data_get(object, "__HANDS_HOUR__");
-		data_get_resource_path(IMAGE_HANDS_HOUR_AMBIENT, path, sizeof(path));
-
-		ret = elm_bg_file_set(hands, path, NULL);
-		if (ret != EINA_TRUE) {
-			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the hour hand image");
-		}
-
-		hands = evas_object_data_get(object, "__HANDS_HOUR_SHADOW__");
-		evas_object_hide(hands);
 	}
 	else // Non-ambient
 	{
 		// Set Watchface
 		data_get_resource_path(IMAGE_BG, path, sizeof(path));
-		object = view_get_watchface();
+		object = view_get_bg();
 		ret = elm_bg_file_set(object, path, NULL);
-		if (ret != EINA_TRUE) {
+		if (ret != EINA_TRUE)
+		{
 			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
 		}
+		object = view_get_bg_plate();
+		evas_object_show(object);
 
 		//Set Day
 		object = view_get_module_day_layout();
 		edje_object_signal_emit(object,"set_default","");
 
-		//Set Second Hand
-		object = view_get_module_second_layout();
-		evas_object_show(object);
-
-		//Set Hour Hand
-		ret = watch_app_get_elm_win(&object);
-		if (ret != APP_ERROR_NONE) {
-			dlog_print(DLOG_ERROR, LOG_TAG, "failed to get window. err = %d", ret);
-			return;
-		}
-
-		hands = evas_object_data_get(object, "__HANDS_HOUR__");
-		data_get_resource_path(IMAGE_HANDS_HOUR, path, sizeof(path));
-		ret = elm_bg_file_set(hands, path, NULL);
-		if (ret != EINA_TRUE) {
-			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the hour hand image");
-		}
-
-		hands = evas_object_data_get(object, "__HANDS_HOUR_SHADOW__");
+		//Set Battery Hand
+		hands = evas_object_data_get(bg, "__HANDS_BAT__");
+		evas_object_show(hands);
+		hands = evas_object_data_get(bg, "__HANDS_BAT_SHADOW__");
 		evas_object_show(hands);
 
-	*/
+		//Set Second Hand
+		hands = evas_object_data_get(bg, "__HANDS_SEC__");
+		evas_object_show(hands);
+		hands = evas_object_data_get(bg, "__HANDS_SEC_SHADOW__");
+		evas_object_show(hands);
 
+		//Set Minute Hand
+		data_get_resource_path(IMAGE_HANDS_MIN, path, sizeof(path));
+		hands = evas_object_data_get(bg, "__HANDS_MIN__");
+		ret = elm_bg_file_set(hands, path, NULL);
+		if (ret != EINA_TRUE)
+		{
+			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
+		}
+		hands = evas_object_data_get(bg, "__HANDS_MIN_SHADOW__");
+		evas_object_show(hands);
+
+		//Set Hour Hand
+		data_get_resource_path(IMAGE_HANDS_HOUR, path, sizeof(path));
+		hands = evas_object_data_get(bg, "__HANDS_HOUR__");
+		ret = elm_bg_file_set(hands, path, NULL);
+		if (ret != EINA_TRUE)
+		{
+			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
+		}
+		hands = evas_object_data_get(bg, "__HANDS_HOUR_SHADOW__");
+		evas_object_show(hands);
+	}
 }
 
 /**
@@ -392,7 +444,9 @@ int main(int argc, char *argv[])
 
 	ret = watch_app_main(argc, argv, &event_callback, NULL);
 	if (ret != APP_ERROR_NONE)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "watch_app_main() is failed. err = %d", ret);
+	}
 
 	return ret;
 }
@@ -405,61 +459,70 @@ int main(int argc, char *argv[])
  */
 static void _set_time(int hour, int min, int sec)
 {
-	Evas_Object *module_layout = NULL;
+	Evas_Object *bg = NULL;
 	Evas_Object *hands = NULL;
+	Evas_Object *hands_shadow = NULL;
 	double degree = 0.0f;
-	int ret = 0;
 
-	/*
-	 * Rotate hands of  the watch
-	 */
-
-	module_layout = view_get_module_minute_layout();
-
-	// Only animate hands when not in ambient and animation wasn't already running
-	if (!s_info.ambient && !s_info.smooth_tick)
+	bg = view_get_bg();
+	if (bg == NULL)
 	{
-		s_info.smooth_tick = true;
-		s_info.sec_min_restart = sec;
-		dlog_print(DLOG_DEBUG, LOG_TAG, "STARTING SMOOTH TICK");
-
-		hands = view_get_module_second_layout();
-
-		edje_object_signal_emit(hands,"second_start_tick","");
-		edje_object_signal_emit(module_layout,"minute_start_tick","");
-
-		dlog_print(DLOG_DEBUG, LOG_TAG, "RESTARTED SMOOTH TICK");
-
-		// Set the start rotation
-		double degree = sec * SEC_ANGLE;
-		view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
-
-		degree = (min + (sec / 60) ) * MIN_ANGLE;
-		view_rotate_hand(module_layout, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
-
-		dlog_print(DLOG_DEBUG, LOG_TAG, "ROTATED HANDS TO START OF SMOOTH TICK");
-
-		s_info.sec_min_restart = sec;
-	}
-	else if (s_info.ambient || s_info.sec_min_restart == sec)
-	{
-		// Update minute hand every minute even when ambient
-		degree = min * MIN_ANGLE;
-		view_rotate_hand(module_layout, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
-	}
-
-	// Update hour hand
-	ret = watch_app_get_elm_win(&module_layout);
-	if (ret != APP_ERROR_NONE) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "failed to get window. err = %d", ret);
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to get bg");
 		return;
 	}
-	hands = evas_object_data_get(module_layout, "__HANDS_HOUR__");
-	degree = (hour * HOUR_ANGLE) + data_get_hour_plus_angle(min, sec);
-	view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
-	hands = evas_object_data_get(hands, "__HANDS_HOUR_SHADOW__");
-	view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_HOUR_SHADOW_PADDING);
 
+	/*
+	 * Rotate hands at the watch
+	 */
+	degree = sec * SEC_ANGLE;
+	hands = evas_object_data_get(bg, "__HANDS_SEC__");
+	view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
+	hands_shadow = evas_object_data_get(bg, "__HANDS_SEC_SHADOW__");
+	view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_SEC_SHADOW_PADDING);
+
+	if (s_info.cur_min != min)
+	{
+		degree = min * MIN_ANGLE;
+		hands = evas_object_data_get(bg, "__HANDS_MIN__");
+		view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
+		hands_shadow = evas_object_data_get(bg, "__HANDS_MIN_SHADOW__");
+		view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_MIN_SHADOW_PADDING);
+		s_info.cur_min = min;
+
+		degree = (hour * HOUR_ANGLE) + data_get_hour_plus_angle(min, sec);
+		hands = evas_object_data_get(bg, "__HANDS_HOUR__");
+		view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
+		hands_shadow = evas_object_data_get(bg, "__HANDS_HOUR_SHADOW__");
+		view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_HOUR_SHADOW_PADDING);
+	}
+}
+
+/**
+ * @brief Set battery level of the watch.
+ * @pram[in] bat The battery level
+ */
+static void _set_battery(int bat)
+{
+	Evas_Object *bg = NULL;
+	Evas_Object *hands = NULL;
+	Evas_Object *hands_shadow = NULL;
+	double degree = 0.0f;
+
+	bg = view_get_bg();
+	if (bg == NULL)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to get bg");
+		return;
+	}
+
+	/*
+	 * Rotate hands at the watch
+	 */
+	degree = BATTERY_START_ANGLE + (bat * BATTERY_ANGLE);
+	hands = evas_object_data_get(bg, "__HANDS_BAT__");
+	view_rotate_hand(hands, degree, (BASE_WIDTH / 2) + BATTERY_OFFSET_X, (BASE_HEIGHT / 2) + BATTERY_OFFSET_Y);
+	hands_shadow = evas_object_data_get(bg, "__HANDS_BAT_SHADOW__");
+	view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2) + BATTERY_OFFSET_X, (BASE_HEIGHT / 2) + BATTERY_OFFSET_Y + HANDS_SEC_SHADOW_PADDING);
 }
 
 /**
@@ -470,6 +533,7 @@ static void _set_time(int hour, int min, int sec)
  */
 static void _set_date(int day, int month, int day_of_week)
 {
+	Evas_Object *bg = NULL;
 	Evas_Object *module_layout = NULL;
 	char txt_day_num[32] = { 0, };
 	char txt_day_txt[4] = { 0, };
@@ -477,20 +541,23 @@ static void _set_date(int day, int month, int day_of_week)
 	/*
 	 * Set day at the watch
 	 */
-	if (s_info.cur_day != day)
-	{
-		module_layout = view_get_watchface();
+	if (s_info.cur_day != day) {
+		module_layout = view_get_module_day_layout();
 
 		snprintf(txt_day_num, sizeof(txt_day_num), "%d", day);
 		view_set_text(module_layout, "txt.day.num", txt_day_num);
 
 		snprintf(txt_day_txt, sizeof(txt_day_num), "%s", get_day_of_week(day_of_week));
-
 		view_set_text(module_layout, "txt.day.txt", txt_day_txt);
 
 		s_info.cur_day = day;
 	}
 
+	bg = view_get_bg();
+	if (bg == NULL) {
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to get bg");
+		return;
+	}
 }
 
 /**
@@ -503,16 +570,11 @@ static Evas_Object *_create_parts(parts_type_e type)
 	Evas_Object *bg = NULL;
 	char *parts_image_path = NULL;
 	int x = 0, y = 0, w = 0, h = 0;
-	int ret = 0;
 
 	/*
 	 * Get the BG
 	 */
-	ret = watch_app_get_elm_win(&bg);
-	if (ret != APP_ERROR_NONE) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "failed to get window. err = %d", ret);
-		return NULL;
-	}
+	bg = view_get_bg();
 
 	/*
 	 * Get the information about the part
@@ -544,7 +606,6 @@ static Evas_Object *_create_parts(parts_type_e type)
 	return parts;
 }
 
-
 /**
  * @brief Create base GUI for the watch.
  * @param[in] width The width size of the watch
@@ -553,19 +614,25 @@ static Evas_Object *_create_parts(parts_type_e type)
 static void _create_base_gui(int width, int height)
 {
 	Evas_Object *win = NULL;
-	Evas_Object *watchface = NULL;
-	Evas_Object *day_layout = NULL;
-	Evas_Object *module_second_layout = NULL;
-	Evas_Object *module_minute_layout = NULL;
+	Evas_Object *bg = NULL;
+	Evas_Object *bg_plate = NULL;
+	Evas_Object *module_day_layout = NULL;
+	Evas_Object *hands_sec = NULL;
+	Evas_Object *hands_sec_shadow = NULL;
+	Evas_Object *hands_min = NULL;
+	Evas_Object *hands_min_shadow = NULL;
 	Evas_Object *hands_hour = NULL;
 	Evas_Object *hands_hour_shadow = NULL;
+	Evas_Object *hands_bat = NULL;
+	Evas_Object *hands_bat_shadow = NULL;
 	char bg_path[PATH_MAX] = { 0, };
+	char bg_plate_path[PATH_MAX] = { 0, };
 	char edj_path[PATH_MAX] = { 0, };
 	int ret = 0;
 
-	s_info.smooth_tick = false;
-
-	// Get window object
+	/*
+	 * Get window object
+	 */
 	ret = watch_app_get_elm_win(&win);
 	if (ret != APP_ERROR_NONE) {
 		dlog_print(DLOG_ERROR, LOG_TAG, "failed to get window. err = %d", ret);
@@ -574,62 +641,73 @@ static void _create_base_gui(int width, int height)
 	evas_object_resize(win, width, height);
 	evas_object_show(win);
 
-	// Get background image file path
+	/*
+	 * Get background image file path
+	 */
 	data_get_resource_path(IMAGE_BG, bg_path, sizeof(bg_path));
 
-	// Get edje file path
-	data_get_resource_path(EDJ_FILE, edj_path, sizeof(edj_path));
-
-	// Create watch background
-	watchface = view_create_watchface(win, bg_path, width, height);
-	if (watchface == NULL) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to create a watchface");
+	/*
+	 * Create BG
+	 */
+	bg = view_create_bg(win, bg_path, width, height);
+	if (bg == NULL) {
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to create a bg");
 		return;
 	}
 
-	// Create layout to display day on the watch
-	day_layout = view_create_module_layout(win, edj_path, "watch_main");
-	if (day_layout) {
-		view_set_module_property(day_layout, 0, 0, width, height);
-		view_set_module_day_layout(day_layout);
+	/*
+	 * Create hands & shadow hands to display the battery level
+	 */
+
+	hands_bat_shadow = _create_parts(PARTS_TYPE_HANDS_BAT_SHADOW);
+	evas_object_data_set(bg, "__HANDS_BAT_SHADOW__", hands_bat_shadow);
+	hands_bat = _create_parts(PARTS_TYPE_HANDS_BAT);
+	evas_object_data_set(bg, "__HANDS_BAT__", hands_bat);
+
+	/*
+	 * Get background plate image file path
+	 */
+	data_get_resource_path(IMAGE_BG_PLATE, bg_plate_path, sizeof(bg_plate_path));
+
+	/*
+	 * Create BG Plate
+	 */
+	bg_plate = view_create_bg_plate(bg, bg_plate_path, BG_PLATE_WIDTH, BG_PLATE_HEIGHT);
+	if (bg_plate == NULL) {
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to create bg plate");
+		return;
 	}
 
-	// Minute Hand
-	module_minute_layout = view_create_module_layout(watchface, edj_path, "layout_module_minute");
-	if (module_minute_layout) {
-		view_set_module_property(module_minute_layout, 0, 0, width, height);
-		view_set_module_minute_layout(module_minute_layout);
-	}
+	/*
+	 * Get edje file path
+	 */
+	data_get_resource_path(EDJ_FILE, edj_path, sizeof(edj_path));
 
-	// Second Hand
-	module_second_layout = view_create_module_layout(watchface, edj_path, "layout_module_second");
-	if (module_second_layout) {
-		view_set_module_property(module_second_layout, 0, 0, width, height);
-		view_set_module_second_layout(module_second_layout);
+	/*
+	 * Create layout to display day number at the watch
+	 */
+	module_day_layout = view_create_module_layout(bg, edj_path, "layout_module_day");
+	if (module_day_layout) {
+		view_set_module_property(module_day_layout, BASE_WIDTH - MODULE_DAY_NUM_SIZE - MODULE_DAY_NUM_RIGHT_PADDING, (BASE_HEIGHT / 2) - (MODULE_DAY_NUM_SIZE / 2), MODULE_DAY_NUM_SIZE, MODULE_DAY_NUM_SIZE);
+		view_set_module_day_layout(module_day_layout);
 	}
-
-	// Hour Hand
-	hands_hour_shadow = _create_parts(PARTS_TYPE_HANDS_HOUR_SHADOW);
-	evas_object_data_set(watchface, "__HANDS_HOUR_SHADOW__", hands_hour_shadow);
-	hands_hour = _create_parts(PARTS_TYPE_HANDS_HOUR);
-	evas_object_data_set(watchface, "__HANDS_HOUR__", hands_hour);
 
 	/*
 	 * Create hands & shadow hands to display at the watch
-	 *//*
-	hands_module_month_shadow = _create_parts(PARTS_TYPE_HANDS_MODULE_MONTH_SHADOW);
-	evas_object_data_set(bg, "__HANDS_MODULE_MONTH_SHADOW__", hands_module_month_shadow);
-	hands_module_month = _create_parts(PARTS_TYPE_HANDS_MODULE_MONTH);
-	evas_object_data_set(bg, "__HANDS_MODULE_MONTH__", hands_module_month);
+	 */
 
-	hands_module_weekday_shadow = _create_parts(PARTS_TYPE_HANDS_MODULE_WEEKDAY_SHADOW);
-	evas_object_data_set(bg, "__HANDS_MODULE_WEEKDAY_SHADOW__", hands_module_weekday_shadow);
-	hands_module_weekday = _create_parts(PARTS_TYPE_HANDS_MODULE_WEEKDAY);
-	evas_object_data_set(bg, "__HANDS_MODULE_WEEKDAY__", hands_module_weekday);
+	hands_min_shadow = _create_parts(PARTS_TYPE_HANDS_MIN_SHADOW);
+	evas_object_data_set(bg, "__HANDS_MIN_SHADOW__", hands_min_shadow);
+	hands_min = _create_parts(PARTS_TYPE_HANDS_MIN);
+	evas_object_data_set(bg, "__HANDS_MIN__", hands_min);
+
+	hands_hour_shadow = _create_parts(PARTS_TYPE_HANDS_HOUR_SHADOW);
+	evas_object_data_set(bg, "__HANDS_HOUR_SHADOW__", hands_hour_shadow);
+	hands_hour = _create_parts(PARTS_TYPE_HANDS_HOUR);
+	evas_object_data_set(bg, "__HANDS_HOUR__", hands_hour);
 
 	hands_sec_shadow = _create_parts(PARTS_TYPE_HANDS_SEC_SHADOW);
 	evas_object_data_set(bg, "__HANDS_SEC_SHADOW__", hands_sec_shadow);
 	hands_sec = _create_parts(PARTS_TYPE_HANDS_SEC);
 	evas_object_data_set(bg, "__HANDS_SEC__", hands_sec);
-*/
 }

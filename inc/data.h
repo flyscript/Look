@@ -19,16 +19,19 @@
 
 #define IMAGE_BG "images/watch_bg.png"
 #define IMAGE_BG_AMBIENT "images/watch_bg_ambient.png"
+#define IMAGE_BG_PLATE "images/watch_bg_plate.png"
+#define IMAGE_HANDS_BAT "images/watch_hand_battery.png"
+#define IMAGE_HANDS_BAT_SHADOW "images/watch_hand_battery_shadow.png"
 #define IMAGE_HANDS_SEC "images/watch_hand_sec.png"
+#define IMAGE_HANDS_SEC_SHADOW "images/watch_hand_sec_shadow.png"
 #define IMAGE_HANDS_SEC_AMBIENT "images/watch_hand_sec_ambient.png"
 #define IMAGE_HANDS_MIN "images/watch_hand_min.png"
+#define IMAGE_HANDS_MIN_SHADOW "images/watch_hand_min_shadow.png"
 #define IMAGE_HANDS_MIN_AMBIENT "images/watch_hand_min_ambient.png"
 #define IMAGE_HANDS_HOUR "images/watch_hand_hr.png"
+#define IMAGE_HANDS_HOUR_SHADOW "images/watch_hand_hr_shadow.png"
 #define IMAGE_HANDS_HOUR_AMBIENT "images/watch_hand_hr_ambient.png"
 #define IMAGE_HANDS_MODULE_CALENDAR "images/watch_hand_module_calendar.png"
-#define IMAGE_HANDS_SEC_SHADOW "images/watch_hand_sec_shadow.png"
-#define IMAGE_HANDS_MIN_SHADOW "images/watch_hand_min_shadow.png"
-#define IMAGE_HANDS_HOUR_SHADOW "images/watch_hand_hr_shadow.png"
 #define IMAGE_HANDS_MODULE_CALENDAR_SHADOW "images/watch_hand_module_calendar_shadow.png"
 
 typedef enum {
@@ -42,6 +45,9 @@ typedef enum {
 	PARTS_TYPE_HANDS_HOUR_SHADOW = 7,
 	PARTS_TYPE_HANDS_MODULE_MONTH_SHADOW = 8,
 	PARTS_TYPE_HANDS_MODULE_WEEKDAY_SHADOW = 9,
+	PARTS_TYPE_HANDS_BAT = 10,
+	PARTS_TYPE_HANDS_BAT_SHADOW = 11,
+	PARTS_TYPE_BG_PLATE= 12,
 	PARTS_TYPE_MAX,
 } parts_type_e;
 

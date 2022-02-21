@@ -75,7 +75,7 @@ void data_finalize(void)
 int data_get_hour_plus_angle(int minute, int second)
 {
 	double minutes = minute + ((second/60) * 0.5);
-	double angle = minute * 0.5;
+	double angle = minutes * 0.5;
 
 	return angle;
 }
@@ -115,6 +115,12 @@ char *data_get_parts_image_path(parts_type_e type)
 	case PARTS_TYPE_HANDS_MODULE_MONTH_SHADOW:
 	case PARTS_TYPE_HANDS_MODULE_WEEKDAY_SHADOW:
 		resource_image = IMAGE_HANDS_MODULE_CALENDAR_SHADOW;
+		break;
+	case PARTS_TYPE_HANDS_BAT:
+		resource_image = IMAGE_HANDS_BAT;
+		break;
+	case PARTS_TYPE_HANDS_BAT_SHADOW:
+		resource_image = IMAGE_HANDS_BAT_SHADOW;
 		break;
 	default:
 		dlog_print(DLOG_ERROR, LOG_TAG, "type error : %d", type);
@@ -159,6 +165,14 @@ void data_get_parts_position(parts_type_e type, int *x, int *y)
 		*x = (BASE_WIDTH / 2) - (HANDS_HOUR_WIDTH / 2);
 		*y = HANDS_HOUR_SHADOW_PADDING;
 		break;
+	case PARTS_TYPE_HANDS_BAT:
+		*x = BATTERY_START_POS_X;
+		*y = BATTERY_START_POS_Y;
+		break;
+	case PARTS_TYPE_HANDS_BAT_SHADOW:
+		*x = BATTERY_START_POS_X;
+		*y = BATTERY_START_POS_Y + HANDS_BAT_SHADOW_PADDING;
+		break;
 	default:
 		dlog_print(DLOG_ERROR, LOG_TAG, "type error : %d", type);
 		break;
@@ -186,6 +200,10 @@ int data_get_parts_width_size(parts_type_e type)
 	case PARTS_TYPE_HANDS_HOUR:
 	case PARTS_TYPE_HANDS_HOUR_SHADOW:
 		parts_width = HANDS_HOUR_WIDTH;
+		break;
+	case PARTS_TYPE_HANDS_BAT:
+	case PARTS_TYPE_HANDS_BAT_SHADOW:
+		parts_width = HANDS_BAT_WIDTH;
 		break;
 	case PARTS_TYPE_HANDS_MODULE_MONTH:
 	case PARTS_TYPE_HANDS_MODULE_MONTH_SHADOW:
@@ -222,6 +240,10 @@ int data_get_parts_height_size(parts_type_e type)
 	case PARTS_TYPE_HANDS_HOUR_SHADOW:
 		parts_height = HANDS_HOUR_HEIGHT;
 		break;
+	case PARTS_TYPE_HANDS_BAT:
+	case PARTS_TYPE_HANDS_BAT_SHADOW:
+		parts_height = HANDS_BAT_HEIGHT;
+		break;
 	case PARTS_TYPE_HANDS_MODULE_MONTH:
 	case PARTS_TYPE_HANDS_MODULE_MONTH_SHADOW:
 	case PARTS_TYPE_HANDS_MODULE_WEEKDAY:
@@ -236,22 +258,6 @@ int data_get_parts_height_size(parts_type_e type)
 	return parts_height;
 }
 
-/**
- * @brief Check whether a leap year.
- * @pram[in] year The year number
- */
-static Eina_Bool _check_leap_year(int year)
-{
-	Eina_Bool ret = EINA_FALSE;
-
-	if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
-		ret = EINA_TRUE;
-	} else {
-		ret = EINA_FALSE;
-	}
-
-	return ret;
-}
 
 char* get_day_of_week(int day)
 {
