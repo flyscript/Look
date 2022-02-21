@@ -268,7 +268,7 @@ collections {
    }
    
    group {
-   	  name: "watch_main";
+   	  name: "layout_module_day";
       images {
          image: "watch_day_num_bg.png" COMP;
          image: "watch_day_num_bg_ambient.png" COMP;
@@ -278,8 +278,8 @@ collections {
          part { name: "day_num_bg";
             type: IMAGE;
             description { state: "default" 0.0;
-               rel1 { relative: 0.75 0.35;}
-               rel2 { relative: 0.75 0.35; }
+               rel1 { relative: 0.5 0.5; }
+               rel2 { relative: 0.5 0.5; }
                min: 100 100;
                max: 100 100;
                image { normal: "watch_day_num_bg.png"; }
@@ -362,7 +362,7 @@ collections {
                   size: 18;
                   min: 1 1;
                   ellipsis: -1;
-                  text: "7";
+                  text: "MON";
                }
                map
                {
@@ -389,6 +389,32 @@ collections {
             description { state: "ambient" 0.0;
                inherit: "default" 0.0;
                color: 108 255 108 255;
+            }
+         }
+         part { name: "day_num_fg";
+            type: IMAGE;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.5 0.5; to: "day_num_bg"; }
+               rel2 { relative: 0.5 0.5; to: "day_num_bg"; }
+               min: 100 100;
+               max: 100 100;
+               image { normal: "watch_day_num_fg.png"; }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               image { normal: "watch_day_num_bg_ambient.png"; }
             }
          }
       }
@@ -438,6 +464,7 @@ collections {
 	      target: "day_num_bg";
 	      target: "txt.day.txt";
 	      target: "txt.day.num";
+	      target: "day_num_fg";
 	      transition: LINEAR 0.0;
 	   }
 	   program 
@@ -449,6 +476,7 @@ collections {
 	      target: "day_num_bg";
 	      target: "txt.day.txt";
 	      target: "txt.day.num";
+	      target: "day_num_fg";
 	      transition: LINEAR 0.0;
 	   }
       }

@@ -147,14 +147,6 @@ void data_get_parts_position(parts_type_e type, int *x, int *y)
 		*x = (BASE_WIDTH / 2) - (HANDS_HOUR_WIDTH / 2);
 		*y = 0;
 		break;
-	case PARTS_TYPE_HANDS_MODULE_MONTH:
-		*x = (BASE_WIDTH / 2) - HANDS_MODULE_CALENDAR_WIDTH - 54;
-		*y = 175;
-		break;
-	case PARTS_TYPE_HANDS_MODULE_WEEKDAY:
-		*x = (BASE_WIDTH / 2) + 54;
-		*y = 175;
-		break;
 	case PARTS_TYPE_HANDS_SEC_SHADOW:
 		*x =  (BASE_WIDTH / 2) - (HANDS_SEC_WIDTH / 2);
 		*y = HANDS_SEC_SHADOW_PADDING;
@@ -166,14 +158,6 @@ void data_get_parts_position(parts_type_e type, int *x, int *y)
 	case PARTS_TYPE_HANDS_HOUR_SHADOW:
 		*x = (BASE_WIDTH / 2) - (HANDS_HOUR_WIDTH / 2);
 		*y = HANDS_HOUR_SHADOW_PADDING;
-		break;
-	case PARTS_TYPE_HANDS_MODULE_MONTH_SHADOW:
-		*x = (BASE_WIDTH / 2) - HANDS_MODULE_CALENDAR_WIDTH - 54;
-		*y = 175 + HANDS_MODULE_CALENDAR_PADDING;
-		break;
-	case PARTS_TYPE_HANDS_MODULE_WEEKDAY_SHADOW:
-		*x = (BASE_WIDTH / 2) + 54;
-		*y = 175 + HANDS_MODULE_CALENDAR_PADDING;
 		break;
 	default:
 		dlog_print(DLOG_ERROR, LOG_TAG, "type error : %d", type);
@@ -269,36 +253,6 @@ static Eina_Bool _check_leap_year(int year)
 	return ret;
 }
 
-/**
- * @brief Calculates total days.
- * @pram[in] day The day number
- * @pram[in] month The month number
- * @pram[in] year The year number
- */
-/*
-static int _get_total_days(int day, int month, int year)
-{
-	Eina_Bool is_leap_year = EINA_FALSE;
-	int months[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-	int i = 0;
-	long total = 0L;
-
-	total = (year - 1) * 365L + (year - 1) / 4 - (year - 1) / 100 + (year - 1) / 400;
-
-	is_leap_year = _check_leap_year(year);
-	if (is_leap_year) {
-		months[1]++;
-	}
-
-	for (i = 0; i < month - 1; i++) {
-		total += months[i];
-	}
-
-	total += day;
-
-	return total;
-}*/
-
 char* get_day_of_week(int day)
 {
 	char months[8][3] = {"SAT", "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
@@ -308,4 +262,3 @@ char* get_day_of_week(int day)
 
 	return strdup(weekday);
 }
-

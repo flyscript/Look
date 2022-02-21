@@ -33,13 +33,15 @@ static struct main_info {
 	int cur_weekday;
 	bool ambient;
 	bool smooth_tick;
+	int cur_min;
 } s_info = {
 	.sec_min_restart = 0,
 	.cur_day = 0,
 	.cur_month = 0,
 	.cur_weekday = 0,
 	.ambient = false,
-	.smooth_tick = false
+	.smooth_tick = false,
+	.cur_min = 0
 };
 
 static void _set_time(int hour, int min, int sec);
@@ -183,10 +185,14 @@ static void app_pause(void *user_data)
 	/*
 	 * Take necessary actions when application becomes invisible.
 	 */
+
+	/* //TODO: Commented out because this might trigger a hangup
 	s_info.smooth_tick = false;
 
 	edje_object_signal_emit(view_get_module_second_layout(),"second_stop_tick","");
 	edje_object_signal_emit(view_get_module_minute_layout(),"minute_stop_tick","");
+	*/
+
 }
 
 /**
@@ -198,7 +204,10 @@ static void app_resume(void *user_data)
 	/*
 	 * Take necessary actions when application becomes visible.
 	 */
+
+	//	Flag smooth tick for restart
 	s_info.smooth_tick = false;
+
 }
 
 /**
@@ -244,6 +253,7 @@ void app_time_tick(watch_time_h watch_time, void* user_data)
  */
 void app_ambient_tick(watch_time_h watch_time, void* user_data)
 {
+	/* //TODO: Commented out temporarily to disable ambient mode
 	int hour = 0;
 	int min = 0;
 	int year = 0;
@@ -260,6 +270,8 @@ void app_ambient_tick(watch_time_h watch_time, void* user_data)
 
 	_set_time(hour, min, 0);
 	_set_date(day, month, day_of_week);
+	*/
+
 }
 
 /**
@@ -269,6 +281,7 @@ void app_ambient_tick(watch_time_h watch_time, void* user_data)
  */
 void app_ambient_changed(bool ambient_mode, void* user_data)
 {
+	 // TODO: Commented out temporarily to disable ambient mode
 	s_info.ambient = ambient_mode;
 
 	Evas_Object *object = NULL;
@@ -280,16 +293,17 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 	{
 		// Set Watchface
 		data_get_resource_path(IMAGE_BG_AMBIENT, path, sizeof(path));
-		object = view_get_watchface();
+		object = view_get_bg();
 		ret = elm_bg_file_set(object, path, NULL);
 		if (ret != EINA_TRUE) {
 			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
 		}
 
-		//Set Day
+		// Set Day
 		object = view_get_module_day_layout();
 		edje_object_signal_emit(object,"set_ambient","");
 
+		/*
 		//Set Second Hand
 		object = view_get_module_second_layout();
 		edje_object_signal_emit(object,"second_set_ambient","");
@@ -353,7 +367,9 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 
 		hands = evas_object_data_get(object, "__HANDS_HOUR_SHADOW__");
 		evas_object_show(hands);
-	}
+
+	*/
+
 }
 
 /**

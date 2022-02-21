@@ -23,65 +23,24 @@
 #include "view.h"
 
 static struct view_info {
-	Evas_Object *watchface;
+	Evas_Object *bg;
 	Evas_Object *module_day_layout;
 	Evas_Object *module_second_layout;
 	Evas_Object *module_minute_layout;
 } s_info = {
-	.watchface = NULL,
+	.bg = NULL,
 	.module_day_layout = NULL,
 	.module_second_layout = NULL,
 	.module_minute_layout = NULL,
 };
-
-
-/**
- * @breif Create a bg object for the watch
- * @param[in] win The window object
- * @param[in] image_path The image path for bg
- * @param[in] width The width size of bg
- * @param[in] height The height size of bg
- */
-Evas_Object *view_create_watchface(Evas_Object *win, const char *image_path, int width, int height)
-{
-	Evas_Object *bg = NULL;
-	Eina_Bool ret = EINA_FALSE;
-
-	if (win == NULL) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "window is NULL");
-		return NULL;
-	}
-
-	bg = elm_bg_add(win);
-	if (bg == NULL) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to add bg");
-		return NULL;
-	}
-
-	ret = elm_bg_file_set(bg, image_path, NULL);
-	if (ret != EINA_TRUE) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
-		evas_object_del(bg);
-		return NULL;
-	}
-
-	elm_bg_option_set(bg, ELM_BG_OPTION_CENTER);
-
-	evas_object_move(bg, 0, 0);
-	evas_object_resize(bg, width, height);
-	evas_object_show(bg);
-
-	s_info.watchface = bg;
-
-	return bg;
-}
 
 /**
  * @brief Set the module day layout.
  */
 void view_set_module_day_layout(Evas_Object *layout)
 {
-	if (layout == NULL) {
+	if (layout == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "layout is NULL");
 		return;
 	}
@@ -89,13 +48,13 @@ void view_set_module_day_layout(Evas_Object *layout)
 	s_info.module_day_layout = layout;
 }
 
-
 /**
  * @brief Set the module second layout.
  */
 void view_set_module_second_layout(Evas_Object *layout)
 {
-	if (layout == NULL) {
+	if (layout == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "layout is NULL");
 		return;
 	}
@@ -103,13 +62,13 @@ void view_set_module_second_layout(Evas_Object *layout)
 	s_info.module_second_layout = layout;
 }
 
-
 /**
- * @brief Set the module second layout.
+ * @brief Set the module minute layout.
  */
 void view_set_module_minute_layout(Evas_Object *layout)
 {
-	if (layout == NULL) {
+	if (layout == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "layout is NULL");
 		return;
 	}
@@ -118,15 +77,15 @@ void view_set_module_minute_layout(Evas_Object *layout)
 }
 
 /**
- * @brief Get the background object.
+ * @brief Get the bg object.
  */
-Evas_Object *view_get_watchface(void)
+Evas_Object *view_get_bg(void)
 {
-	return s_info.watchface;
+	return s_info.bg;
 }
 
 /**
- * @brief Get the day layout object.
+ * @brief Get the module day layout.
  */
 Evas_Object *view_get_module_day_layout(void)
 {
@@ -149,7 +108,6 @@ Evas_Object *view_get_module_minute_layout(void)
 	return s_info.module_minute_layout;
 }
 
-
 /**
  * @brief Set text to the part.
  * @param[in] parent Object has part to which you want to set text
@@ -158,7 +116,8 @@ Evas_Object *view_get_module_minute_layout(void)
  */
 void view_set_text(Evas_Object *parent, const char *part_name, const char *text)
 {
-	if (parent == NULL) {
+	if (parent == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "parent is NULL.");
 		return;
 	}
@@ -178,7 +137,8 @@ void view_rotate_hand(Evas_Object *hand, double degree, Evas_Coord cx, Evas_Coor
 {
 	Evas_Map *m = NULL;
 
-	if (hand == NULL) {
+	if (hand == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "hand is NULL");
 		return;
 	}
@@ -192,32 +152,48 @@ void view_rotate_hand(Evas_Object *hand, double degree, Evas_Coord cx, Evas_Coor
 }
 
 /**
- * @brief Rotate hands of the watch.
- * @param[in] degree The degree you want to rotate
-
-void view_rotate_moonphase(float degree)
+ * @breif Create a bg object for the watch
+ * @param[in] win The window object
+ * @param[in] image_path The image path for bg
+ * @param[in] width The width size of bg
+ * @param[in] height The height size of bg
+ */
+Evas_Object *view_create_bg(Evas_Object *win, const char *image_path, int width, int height)
 {
-	Evas_Object *module_moonphase_layout = NULL;
-	Evas_Object *edj_obj = NULL;
-	Edje_Message_Float msg;
+	Evas_Object *bg = NULL;
+	Eina_Bool ret = EINA_FALSE;
 
-	module_moonphase_layout = view_get_module_moonphase_layout();
-	if (module_moonphase_layout == NULL) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to get moon phase layout");
-		return;
+	if (win == NULL)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "window is NULL");
+		return NULL;
 	}
 
-	edj_obj = elm_layout_edje_get(module_moonphase_layout);
-	if (edj_obj == NULL) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to get edje object");
-		return;
+	bg = elm_bg_add(win);
+	if (bg == NULL)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to add bg");
+		return NULL;
 	}
 
-	msg.val = degree;
+	ret = elm_bg_file_set(bg, image_path, NULL);
+	if (ret != EINA_TRUE)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
+		evas_object_del(bg);
+		return NULL;
+	}
 
-	edje_object_message_send(edj_obj, EDJE_MESSAGE_FLOAT, 1, &msg);
+	elm_bg_option_set(bg, ELM_BG_OPTION_CENTER);
+
+	evas_object_move(bg, 0, 0);
+	evas_object_resize(bg, width, height);
+	evas_object_show(bg);
+
+	s_info.bg = bg;
+
+	return bg;
 }
-*/
 
 /**
  * @brief Make a layout to target parent object with edje file.
@@ -230,7 +206,8 @@ Evas_Object *view_create_layout(Evas_Object *parent, const char *file_path, cons
 {
 	Evas_Object *layout = NULL;
 
-	if (parent == NULL) {
+	if (parent == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "parent is NULL.");
 		return NULL;
 	}
@@ -261,7 +238,8 @@ Evas_Object *view_create_layout(Evas_Object *parent, const char *file_path, cons
  */
 void view_set_module_property(Evas_Object *layout, int x, int y, int w, int h)
 {
-	if (layout == NULL) {
+	if (layout == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "layout is NULL");
 		return;
 	}
@@ -280,23 +258,27 @@ Evas_Object *view_create_module_layout(Evas_Object *parent, const char *file_pat
 {
 	Evas_Object *layout = NULL;
 
-	if (parent == NULL) {
+	if (parent == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "parent is NULL");
 		return NULL;
 	}
 
-	if (file_path == NULL) {
+	if (file_path == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "file path is NULL");
 		return NULL;
 	}
 
-	if (group_name == NULL) {
+	if (group_name == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "group name is NULL");
 		return NULL;
 	}
 
 	layout = view_create_layout(parent, file_path, group_name, NULL);
-	if (layout == NULL) {
+	if (layout == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to create module layout");
 		return NULL;
 	}
@@ -312,12 +294,13 @@ Evas_Object *view_create_module_layout(Evas_Object *parent, const char *file_pat
  */
 void view_set_opacity_to_parts(Evas_Object *parts)
 {
-	if (parts == NULL) {
+	if (parts == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set opacity to parts");
 		return;
 	}
 
-	evas_object_color_set(parts, 255, 255, 255, 255 * 0.75);
+	evas_object_color_set(parts, 255, 255, 255, 255 * 0.5);
 }
 
 /**
@@ -334,19 +317,22 @@ Evas_Object *view_create_parts(Evas_Object *parent, const char *image_path, int 
 	Evas_Object *parts = NULL;
 	Eina_Bool ret = EINA_FALSE;
 
-	if (parent == NULL) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "background is NULL");
+	if (parent == NULL)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "bg is NULL");
 		return NULL;
 	}
 
 	parts = elm_image_add(parent);
-	if (parts == NULL) {
+	if (parts == NULL)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to add image");
 		return NULL;
 	}
 
 	ret = elm_image_file_set(parts, image_path, NULL);
-	if (ret != EINA_TRUE) {
+	if (ret != EINA_TRUE)
+	{
 		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set image");
 		evas_object_del(parts);
 		return NULL;
@@ -364,32 +350,21 @@ Evas_Object *view_create_parts(Evas_Object *parent, const char *image_path, int 
  */
 void view_destroy_base_gui(void)
 {
-	if (s_info.watchface) {
-		evas_object_del(s_info.watchface);
-		s_info.watchface = NULL;
+	if (s_info.module_day_layout)
+	{
+		evas_object_del(s_info.module_day_layout);
+		s_info.module_day_layout = NULL;
 	}
 
-	if (s_info.module_second_layout) {
-		evas_object_del(s_info.module_second_layout);
-		s_info.module_second_layout = NULL;
-	}
-
-	if (s_info.module_minute_layout) {
-		evas_object_del(s_info.module_minute_layout);
-		s_info.module_minute_layout = NULL;
-	}
-
-	if (s_info.watchface) {
-		evas_object_data_del(s_info.watchface, "__HANDS_MIN__");
-		evas_object_data_del(s_info.watchface, "__HANDS_HOUR__");
-		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_MONTH__");
-		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_WEEKDAY__");
-		evas_object_data_del(s_info.watchface, "__HANDS_SEC_SHADOW__");
-		evas_object_data_del(s_info.watchface, "__HANDS_MIN_SHADOW__");
-		evas_object_data_del(s_info.watchface, "__HANDS_HOUR_SHADOW__");
-		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_MONTH_SHADOW__");
-		evas_object_data_del(s_info.watchface, "__HANDS_MODULE_WEEKDAY_SHADOW__");
-		evas_object_del(s_info.watchface);
-		s_info.watchface = NULL;
+	if (s_info.bg)
+	{
+		evas_object_data_del(s_info.bg, "__HANDS_SEC__");
+		evas_object_data_del(s_info.bg, "__HANDS_SEC_SHADOW__");
+		evas_object_data_del(s_info.bg, "__HANDS_MIN__");
+		evas_object_data_del(s_info.bg, "__HANDS_MIN_SHADOW__");
+		evas_object_data_del(s_info.bg, "__HANDS_HOUR__");
+		evas_object_data_del(s_info.bg, "__HANDS_HOUR_SHADOW__");
+		evas_object_del(s_info.bg);
+		s_info.bg = NULL;
 	}
 }
