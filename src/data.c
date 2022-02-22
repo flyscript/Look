@@ -140,6 +140,7 @@ char *data_get_parts_image_path(parts_type_e type)
  */
 void data_get_parts_position(parts_type_e type, int *x, int *y)
 {
+
 	switch (type) {
 	case PARTS_TYPE_HANDS_SEC:
 		*x = (BASE_WIDTH / 2) - (HANDS_SEC_WIDTH / 2);
@@ -180,14 +181,28 @@ void data_get_parts_position(parts_type_e type, int *x, int *y)
 
 }
 
+
 /**
- * @brief Get the TopLeft position of object A as it would be if centered on object B
- * @param[in] sizeA The A size
- * @param[in] sizeB The B size
+ * @brief Set background image of a part
+ * @param[in] obj Object to set the background of
+ * @param[in] image The image of the new background
  */
-static int get_a_centered_on_b(int sizeA, int sizeB)
+
+bool set_object_background_image(Evas_Object* obj, const char* image)
 {
-	return (sizeB / 2) - (sizeA / 2);
+	char path[PATH_MAX] = { 0, };
+	int ret = 0;
+
+	data_get_resource_path(image, path, sizeof(path));
+
+	ret = elm_bg_file_set(obj, path, NULL);
+	if (ret != EINA_TRUE)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set background image");
+		return false;
+	}
+
+	return true;
 }
 
 /**

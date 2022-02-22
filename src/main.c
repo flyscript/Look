@@ -33,6 +33,7 @@ static struct main_info {
 	int cur_month;
 	int cur_weekday;
 	bool ambient;
+	bool low_battery;
 	bool smooth_tick;
 	int cur_min;
 } s_info = {
@@ -41,6 +42,7 @@ static struct main_info {
 	.cur_month = 0,
 	.cur_weekday = 0,
 	.ambient = false,
+	.low_battery = false,
 	.smooth_tick = false,
 	.cur_min = 0
 };
@@ -263,24 +265,23 @@ void app_time_tick(watch_time_h watch_time, void* user_data)
  */
 void app_ambient_tick(watch_time_h watch_time, void* user_data)
 {
-	//TODO: Commented out temporarily to disable ambient mode
 	int hour = 0;
 	int min = 0;
-	int year = 0;
-	int month = 0;
-	int day = 0;
-	int day_of_week = 0;
+	int battery_level = 0;
 
 	watch_time_get_hour(watch_time, &hour);
 	watch_time_get_minute(watch_time, &min);
-	watch_time_get_day(watch_time, &day);
-	watch_time_get_month(watch_time, &month);
-	watch_time_get_year(watch_time, &year);
-	watch_time_get_day_of_week(watch_time, &day_of_week);
 
 	_set_time(hour, min, 0);
-	_set_date(day, month, day_of_week);
 
+	int ret = device_battery_get_percent(&battery_level);
+	if (ret != 0)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to get battery level");
+		return;
+	}
+
+	_set_battery(battery_level);
 }
 
 /**
@@ -296,8 +297,6 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 	Evas_Object *bg = NULL;
 	Evas_Object *object = NULL;
 	Evas_Object *hands = NULL;
-	char path[PATH_MAX] = { 0, };
-	int ret = 0;
 
 	bg = view_get_bg();
 	if (bg == NULL)
@@ -309,19 +308,19 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 	if (ambient_mode) // Ambient
 	{
 		// Set Watchface
-		data_get_resource_path(IMAGE_BG_AMBIENT, path, sizeof(path));
-		object = view_get_bg();
-		ret = elm_bg_file_set(object, path, NULL);
-		if (ret != EINA_TRUE)
-		{
-			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
-		}
+		set_object_background_image(bg, (s_info.low_battery ? IMAGE_BG_AMBIENT_LOWBAT : IMAGE_BG_AMBIENT));
+
 		object = view_get_bg_plate();
 		evas_object_hide(object);
 
 		// Set Day
 		object = view_get_module_day_layout();
 		edje_object_signal_emit(object,"set_ambient","");
+
+		if (s_info.low_battery)
+		{
+			evas_object_hide(object);
+		}
 
 		//Set Battery Hand
 		hands = evas_object_data_get(bg, "__HANDS_BAT__");
@@ -336,24 +335,14 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		evas_object_hide(hands);
 
 		//Set Minute Hand
-		data_get_resource_path(IMAGE_HANDS_MIN_AMBIENT, path, sizeof(path));
-		hands = evas_object_data_get(bg, "__HANDS_MIN__");
-		ret = elm_bg_file_set(hands, path, NULL);
-		if (ret != EINA_TRUE)
-		{
-			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
-		}
+		set_object_background_image(evas_object_data_get(bg, "__HANDS_MIN__"), (s_info.low_battery ? IMAGE_HANDS_MIN_AMBIENT_LOWBAT : IMAGE_HANDS_MIN_AMBIENT));
+
 		hands = evas_object_data_get(bg, "__HANDS_MIN_SHADOW__");
 		evas_object_hide(hands);
 
 		//Set Hour Hand
-		data_get_resource_path(IMAGE_HANDS_HOUR_AMBIENT, path, sizeof(path));
-		hands = evas_object_data_get(bg, "__HANDS_HOUR__");
-		ret = elm_bg_file_set(hands, path, NULL);
-		if (ret != EINA_TRUE)
-		{
-			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
-		}
+		set_object_background_image(evas_object_data_get(bg, "__HANDS_HOUR__"), (s_info.low_battery ? IMAGE_HANDS_HOUR_AMBIENT_LOWBAT : IMAGE_HANDS_HOUR_AMBIENT));
+
 		hands = evas_object_data_get(bg, "__HANDS_HOUR_SHADOW__");
 		evas_object_hide(hands);
 
@@ -374,18 +363,13 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 	else // Non-ambient
 	{
 		// Set Watchface
-		data_get_resource_path(IMAGE_BG, path, sizeof(path));
-		object = view_get_bg();
-		ret = elm_bg_file_set(object, path, NULL);
-		if (ret != EINA_TRUE)
-		{
-			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
-		}
+		set_object_background_image(bg, IMAGE_BG);
 		object = view_get_bg_plate();
 		evas_object_show(object);
 
 		//Set Day
 		object = view_get_module_day_layout();
+		evas_object_show(object);
 		edje_object_signal_emit(object,"set_default","");
 
 		//Set Battery Hand
@@ -401,24 +385,12 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		evas_object_show(hands);
 
 		//Set Minute Hand
-		data_get_resource_path(IMAGE_HANDS_MIN, path, sizeof(path));
-		hands = evas_object_data_get(bg, "__HANDS_MIN__");
-		ret = elm_bg_file_set(hands, path, NULL);
-		if (ret != EINA_TRUE)
-		{
-			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
-		}
+		set_object_background_image(evas_object_data_get(bg, "__HANDS_MIN__"), IMAGE_HANDS_MIN);
 		hands = evas_object_data_get(bg, "__HANDS_MIN_SHADOW__");
 		evas_object_show(hands);
 
 		//Set Hour Hand
-		data_get_resource_path(IMAGE_HANDS_HOUR, path, sizeof(path));
-		hands = evas_object_data_get(bg, "__HANDS_HOUR__");
-		ret = elm_bg_file_set(hands, path, NULL);
-		if (ret != EINA_TRUE)
-		{
-			dlog_print(DLOG_ERROR, LOG_TAG, "Failed to set the background image");
-		}
+		set_object_background_image(evas_object_data_get(bg, "__HANDS_HOUR__"), IMAGE_HANDS_HOUR);
 		hands = evas_object_data_get(bg, "__HANDS_HOUR_SHADOW__");
 		evas_object_show(hands);
 	}
@@ -474,11 +446,14 @@ static void _set_time(int hour, int min, int sec)
 	/*
 	 * Rotate hands at the watch
 	 */
-	degree = sec * SEC_ANGLE;
-	hands = evas_object_data_get(bg, "__HANDS_SEC__");
-	view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
-	hands_shadow = evas_object_data_get(bg, "__HANDS_SEC_SHADOW__");
-	view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_SEC_SHADOW_PADDING);
+	if (!s_info.ambient)
+	{
+		degree = sec * SEC_ANGLE;
+		hands = evas_object_data_get(bg, "__HANDS_SEC__");
+		view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
+		hands_shadow = evas_object_data_get(bg, "__HANDS_SEC_SHADOW__");
+		view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_SEC_SHADOW_PADDING);
+	}
 
 	if (s_info.cur_min != min)
 	{
@@ -516,13 +491,50 @@ static void _set_battery(int bat)
 	}
 
 	/*
-	 * Rotate hands at the watch
+	 *
+	 *  Adjust battery indicator status
 	 */
-	degree = BATTERY_START_ANGLE + (bat * BATTERY_ANGLE);
-	hands = evas_object_data_get(bg, "__HANDS_BAT__");
-	view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
-	hands_shadow = evas_object_data_get(bg, "__HANDS_BAT_SHADOW__");
-	view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_BAT_SHADOW_PADDING);
+
+	// Low Battery
+	if (bat <= LOW_BATTERY_LEVEL && !s_info.low_battery)
+	{
+		s_info.low_battery = true;
+
+		set_object_background_image(evas_object_data_get(bg, "__HANDS_BAT__"), IMAGE_HANDS_BAT_LOWBAT);
+
+		if (s_info.ambient)
+		{
+			set_object_background_image(bg, IMAGE_BG_AMBIENT_LOWBAT);
+			evas_object_hide(view_get_module_day_layout());
+			set_object_background_image(evas_object_data_get(bg, "__HANDS_MIN__"), IMAGE_HANDS_MIN_AMBIENT_LOWBAT);
+			set_object_background_image(evas_object_data_get(bg, "__HANDS_HOUR__"), IMAGE_HANDS_HOUR_AMBIENT_LOWBAT);
+		}
+	}
+	// Regular Battery
+	else if (bat > LOW_BATTERY_LEVEL && s_info.low_battery)
+	{
+		s_info.low_battery = false;
+
+		set_object_background_image(evas_object_data_get(bg, "__HANDS_BAT__"), IMAGE_HANDS_BAT);
+
+		if (s_info.ambient)
+		{
+			set_object_background_image(bg, IMAGE_BG_AMBIENT);
+			evas_object_show(view_get_module_day_layout());
+			set_object_background_image(evas_object_data_get(bg, "__HANDS_MIN__"), IMAGE_HANDS_MIN_AMBIENT);
+			set_object_background_image(evas_object_data_get(bg, "__HANDS_HOUR__"), IMAGE_HANDS_HOUR_AMBIENT);
+		}
+	}
+
+	// Rotate battery hand
+	if (!s_info.ambient)
+	{
+		degree = BATTERY_START_ANGLE + (bat * BATTERY_ANGLE);
+		hands = evas_object_data_get(bg, "__HANDS_BAT__");
+		view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
+		hands_shadow = evas_object_data_get(bg, "__HANDS_BAT_SHADOW__");
+		view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_BAT_SHADOW_PADDING);
+	}
 }
 
 /**
