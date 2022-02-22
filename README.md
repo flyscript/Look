@@ -56,7 +56,7 @@ Earlier on I noticed that when the minute and hour hand are close to eachother, 
 ### Smooth Second Hand Animation
 https://user-images.githubusercontent.com/39959063/155238398-24f902f2-cd0c-42a4-b180-e334fd896103.mp4
 
-The second hand is animated using Edje, in 15-second increments because things get a bit loopy and glitchy if you attempt to do the 360 degree rotation in a single 60 second program.
+The second hand is animated using Edje, in 15-second increments because things get a bit loopy and glitchy if you attempt to do the 360 degree rotation in a single 60 second program. These 4 15-second programs cycle perfectly, with no noticeable effects when transitioning from one to the other, giving the effect of a completely smooth and uninterrupted rotation.
 
 Edje is also used to create the date/day layout module on the righthand side, as a seperate element from the main background. This would be a prime target for future aniamtion work, e.g: getting it to wiggle when you tap on it, as if you were tapping on a real gauge.
 
