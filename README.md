@@ -1,12 +1,20 @@
 # Look - A Tizen Watch Project
 
+![Main](https://user-images.githubusercontent.com/39959063/155225316-8fc0301a-a282-4879-89d3-1120acb93976.png)
+
 This watchface was designed because I was frustrated with a lack of aviation instrument-inspired designs on the Samsung Galaxy watch store, and I wanted to learn how to make my own.
 
 This project has actually been a great way to brush back up on my C/C++ skills after spending so long using primarily C# in my work!
 
-#### Main Watchface
-![Main_Lowbat](https://user-images.githubusercontent.com/39959063/155229907-bf52daff-215f-45e5-8276-95c2a2e4ea70.png)
+### Contents
+- [Main Watchface](https://github.com/flyscript/Look#main-watchface)
+- [Ambient Mode](https://github.com/flyscript/Look#ambient-mode)
+- [Low Battery](https://github.com/flyscript/Look#low-battery)
+- [Ambient Hand Overlap](https://github.com/flyscript/Look#ambient-hand-overlap)
+
+### Main Watchface
 ![Main](https://user-images.githubusercontent.com/39959063/155225316-8fc0301a-a282-4879-89d3-1120acb93976.png)
+![Main_Lowbat](https://user-images.githubusercontent.com/39959063/155229907-bf52daff-215f-45e5-8276-95c2a2e4ea70.png)
 
 The watchface of course features hands for the current hour, minute, and second (which is animated smoothly like a real cockpit instrument would behave). Also featured is a day/date readout on the righthand side, similar to an [altimeter setting window](http://learntoflyblog.com/2015/04/16/cfi-brief-pitot-static-systems-and-flight-instruments-part-ii/) for pressure; and a battery indicator on the lower left-hand side.
 
@@ -18,18 +26,18 @@ The battery indicator on the watch is inspired from the graduated lines of Volt-
 
 Taking this historic equipment that helped win WW2, I made some modifications to make those elements better suited to a small, slightly more modern watchface; being careful to preserve the character of the original design elements.
 
-#### Ambient Mode
+### Ambient Mode
 ![Ambient](https://user-images.githubusercontent.com/39959063/155225518-8d5e95fe-07b9-44d7-b172-9b438b2db120.png)
 
 I decided to model the "screensaver" ambient mode for this watch on the green "glow-in-the-dark" effect that some aviation instrumentation has. For the Spitfire, this was acheived by coating elements of the instruments in a radioactive Radium paint, and many instruments used today still actually contain this paint! Thankfully, the watch only needs regular pixels. The second hand is removed in this state, as updates occur only every minute in ambient mode, and the less pixels that are on (and the less thigns moving etc), the less battery drain.
 
-#### Low Battery
+### Low Battery
 ![Main_Lowbat](https://user-images.githubusercontent.com/39959063/155230026-3aa25a18-a495-431d-89f2-8099fbabd336.png)
 ![Ambient_Lowbat](https://user-images.githubusercontent.com/39959063/155230041-9623a581-5089-463e-9dfe-4250cba8708d.png)
 
 Radium "glow-in-the-dark" paint doesn't only come in green, it can be red too! When the device has low battery, this is indicated by the battery watch hand becoming red, as if giving off some of this radioactive illumination. If in ambient mode, the watchface and hands of the watch become red instead of green, and the day/date functionality as well as some trimmings are removed for additional power saving.
 
-#### Ambient Hand Overlap
+### Ambient Hand Overlap
 ![Ambient_Overlap](https://user-images.githubusercontent.com/39959063/155229419-2bdf200d-0f78-4646-bfab-8f3d0b7d0dd6.png)
 ![Ambient_Lowbat_Overlap](https://user-images.githubusercontent.com/39959063/155230181-38fe7181-c1cf-4c71-ae9a-56642f180a92.png)
 
