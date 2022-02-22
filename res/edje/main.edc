@@ -357,8 +357,8 @@ collections {
          part { name: "txt.day.txt";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.5 0.7; to: "day_num_bg"; }
-               rel2 { relative: 0.5 0.7; to: "day_num_bg"; }
+               rel1 { relative: 0.475 0.7; to: "day_num_bg"; }
+               rel2 { relative: 0.475 0.7; to: "day_num_bg"; }
                align: 0.5 0.75;
                color: 255 255 255 255;
                text {
