@@ -166,18 +166,28 @@ void data_get_parts_position(parts_type_e type, int *x, int *y)
 		*y = HANDS_HOUR_SHADOW_PADDING;
 		break;
 	case PARTS_TYPE_HANDS_BAT:
-		*x = BATTERY_START_POS_X;
-		*y = BATTERY_START_POS_Y;
+		*x = get_a_centered_on_b(HANDS_BAT_WIDTH, BASE_WIDTH);
+		*y = get_a_centered_on_b(HANDS_BAT_HEIGHT, BASE_HEIGHT);
 		break;
 	case PARTS_TYPE_HANDS_BAT_SHADOW:
-		*x = BATTERY_START_POS_X;
-		*y = BATTERY_START_POS_Y + HANDS_BAT_SHADOW_PADDING;
+		*x = get_a_centered_on_b(HANDS_BAT_WIDTH, BASE_WIDTH);
+		*y = get_a_centered_on_b(HANDS_BAT_HEIGHT, BASE_HEIGHT) + HANDS_BAT_SHADOW_PADDING;
 		break;
 	default:
 		dlog_print(DLOG_ERROR, LOG_TAG, "type error : %d", type);
 		break;
 	}
 
+}
+
+/**
+ * @brief Get the TopLeft position of object A as it would be if centered on object B
+ * @param[in] sizeA The A size
+ * @param[in] sizeB The B size
+ */
+static int get_a_centered_on_b(int sizeA, int sizeB)
+{
+	return (sizeB / 2) - (sizeA / 2);
 }
 
 /**

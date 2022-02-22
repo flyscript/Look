@@ -520,9 +520,9 @@ static void _set_battery(int bat)
 	 */
 	degree = BATTERY_START_ANGLE + (bat * BATTERY_ANGLE);
 	hands = evas_object_data_get(bg, "__HANDS_BAT__");
-	view_rotate_hand(hands, degree, (BASE_WIDTH / 2) + BATTERY_OFFSET_X, (BASE_HEIGHT / 2) + BATTERY_OFFSET_Y);
+	view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
 	hands_shadow = evas_object_data_get(bg, "__HANDS_BAT_SHADOW__");
-	view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2) + BATTERY_OFFSET_X, (BASE_HEIGHT / 2) + BATTERY_OFFSET_Y + HANDS_SEC_SHADOW_PADDING);
+	view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_BAT_SHADOW_PADDING);
 }
 
 /**

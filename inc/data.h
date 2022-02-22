@@ -71,6 +71,8 @@ int data_get_parts_height_size(parts_type_e type);
 int data_get_juliandate(int day, int month, int year);
 float data_get_moonphase(int day, int month, int year);
 
+static int get_a_centered_on_b(int sizeA, int sizeB);
+
 char* get_day_of_week(int day);
 
 #endif
