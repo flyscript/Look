@@ -27,7 +27,7 @@ collections {
    				type: IMAGE;   				
 	            description { state: "default" 0.0;
 	               rel1 { relative: 0.02 0.02; to: "second_hand"; }
-	               rel2 { relative: 1.02 1.02; to: "second_hand"; }
+	               rel2 { relative: 0.02 0.02; to: "second_hand"; }
 	               min: 30 360;
 	               max: 30 360;
 	               color: 255 255 255 191;
@@ -45,7 +45,19 @@ collections {
 	                  }
 	               }
 	            }
-	            description { state: "second_ticked" 0.0;
+	            description { state: "second_ticked_15" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 90;
+	            }
+	            description { state: "second_ticked_30" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 180;
+	            }
+	            description { state: "second_ticked_45" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 270;
+	            }
+	            description { state: "second_ticked_60" 0.0;
 	               inherit: "default" 0.0;
 	               map.rotation.z: 360;
 	            }
@@ -75,7 +87,19 @@ collections {
 	                  }
 	               }
 	            }
-	            description { state: "second_ticked" 0.0;
+	            description { state: "second_ticked_15" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 90;
+	            }
+	            description { state: "second_ticked_30" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 180;
+	            }
+	            description { state: "second_ticked_45" 0.0;
+	               inherit: "default" 0.0;
+	               map.rotation.z: 270;
+	            }
+	            description { state: "second_ticked_60" 0.0;
 	               inherit: "default" 0.0;
 	               map.rotation.z: 360;
 	            }
@@ -91,12 +115,45 @@ collections {
 		      name: "second_tick";
 		      signal: "second_tick";
 		      source: "*";
-		      action: STATE_SET "second_ticked" 0.0;
+		      action: STATE_SET "second_ticked_15" 0.0;
 		      target: "second_hand";
 		      target: "second_hand_shadow";
-		      transition: LINEAR 60.0;
+		      transition: LINEAR 15.0;
+		      after: "second_tick_15";
+		   }		
+		   program
+		   {
+		      name: "second_tick_15";
+		      signal: "second_tick_15";
+		      source: "*";
+		      action: STATE_SET "second_ticked_30" 0.0;
+		      target: "second_hand";
+		      target: "second_hand_shadow";
+		      transition: LINEAR 15.0;
+		      after: "second_tick_30";
+		   }  
+		   program
+		   {
+		      name: "second_tick_30";
+		      signal: "second_tick_30";
+		      source: "*";
+		      action: STATE_SET "second_ticked_45" 0.0;
+		      target: "second_hand";
+		      target: "second_hand_shadow";
+		      transition: LINEAR 15.0;
+		      after: "second_tick_45";
+		   }  
+		   program
+		   {
+		      name: "second_tick_45";
+		      signal: "second_tick_45";
+		      source: "*";
+		      action: STATE_SET "second_ticked_60" 0.0;
+		      target: "second_hand";
+		      target: "second_hand_shadow";
+		      transition: LINEAR 15.0;
 		      after: "second_reset_tick";
-		   }		  
+		   }  
 		   program
 		   {
 		      name: "second_reset_tick";
@@ -115,7 +172,10 @@ collections {
 		      source: "*";
 			   action: ACTION_STOP;
 			   target: "second_tick";
-			   after: "second_reset_tick";
+			   target: "second_tick_15";
+			   target: "second_tick_30";
+			   target: "second_tick_45";
+		      after: "second_reset_tick";
 		   }
 		   program
 		   {

@@ -190,8 +190,9 @@ static void app_pause(void *user_data)
 	 * Take necessary actions when application becomes invisible.
 	 */
 
-	/* //TODO: Commented out because this might trigger a hangup
 	s_info.smooth_tick = false;
+
+	/* //TODO: Commented out because this might trigger a hangup
 
 	edje_object_signal_emit(view_get_module_second_layout(),"second_stop_tick","");
 	edje_object_signal_emit(view_get_module_minute_layout(),"minute_stop_tick","");
@@ -291,7 +292,6 @@ void app_ambient_tick(watch_time_h watch_time, void* user_data)
  */
 void app_ambient_changed(bool ambient_mode, void* user_data)
 {
-	 // TODO: Commented out temporarily to disable ambient mode
 	s_info.ambient = ambient_mode;
 
 	Evas_Object *bg = NULL;
@@ -328,12 +328,6 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		hands = evas_object_data_get(bg, "__HANDS_BAT_SHADOW__");
 		evas_object_hide(hands);
 
-		//Set Second Hand
-		hands = evas_object_data_get(bg, "__HANDS_SEC__");
-		evas_object_hide(hands);
-		hands = evas_object_data_get(bg, "__HANDS_SEC_SHADOW__");
-		evas_object_hide(hands);
-
 		//Set Minute Hand
 		set_object_background_image(evas_object_data_get(bg, "__HANDS_MIN__"), (s_info.low_battery ? IMAGE_HANDS_MIN_AMBIENT_LOWBAT : IMAGE_HANDS_MIN_AMBIENT));
 
@@ -346,18 +340,18 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		hands = evas_object_data_get(bg, "__HANDS_HOUR_SHADOW__");
 		evas_object_hide(hands);
 
-		/*
 		//Set Second Hand
 		object = view_get_module_second_layout();
 		edje_object_signal_emit(object,"second_set_ambient","");
 		evas_object_hide(object);
 
+		/*TODO: Commented out as smooth tick is re-implemented
 		//Set Minute Hand
 		object = view_get_module_minute_layout();
 		edje_object_signal_emit(object,"minute_set_ambient","");
+		*/
 
 		s_info.smooth_tick = false;
-		 */
 
 	}
 	else // Non-ambient
@@ -379,9 +373,7 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		evas_object_show(hands);
 
 		//Set Second Hand
-		hands = evas_object_data_get(bg, "__HANDS_SEC__");
-		evas_object_show(hands);
-		hands = evas_object_data_get(bg, "__HANDS_SEC_SHADOW__");
+		hands = view_get_module_second_layout();
 		evas_object_show(hands);
 
 		//Set Minute Hand
@@ -446,13 +438,13 @@ static void _set_time(int hour, int min, int sec)
 	/*
 	 * Rotate hands at the watch
 	 */
-	if (!s_info.ambient)
+	if (!s_info.ambient && !s_info.smooth_tick)
 	{
+		s_info.smooth_tick = true;
 		degree = sec * SEC_ANGLE;
-		hands = evas_object_data_get(bg, "__HANDS_SEC__");
+		hands = view_get_module_second_layout();
 		view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
-		hands_shadow = evas_object_data_get(bg, "__HANDS_SEC_SHADOW__");
-		view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_SEC_SHADOW_PADDING);
+		edje_object_signal_emit(hands,"second_start_tick","");
 	}
 
 	if (s_info.cur_min != min)
@@ -629,8 +621,7 @@ static void _create_base_gui(int width, int height)
 	Evas_Object *bg = NULL;
 	Evas_Object *bg_plate = NULL;
 	Evas_Object *module_day_layout = NULL;
-	Evas_Object *hands_sec = NULL;
-	Evas_Object *hands_sec_shadow = NULL;
+	Evas_Object *module_sec_layout = NULL;
 	Evas_Object *hands_min = NULL;
 	Evas_Object *hands_min_shadow = NULL;
 	Evas_Object *hands_hour = NULL;
@@ -699,7 +690,8 @@ static void _create_base_gui(int width, int height)
 	 * Create layout to display day number at the watch
 	 */
 	module_day_layout = view_create_module_layout(bg, edj_path, "layout_module_day");
-	if (module_day_layout) {
+	if (module_day_layout)
+	{
 		view_set_module_property(module_day_layout, BASE_WIDTH - MODULE_DAY_NUM_SIZE - MODULE_DAY_NUM_RIGHT_PADDING, (BASE_HEIGHT / 2) - (MODULE_DAY_NUM_SIZE / 2), MODULE_DAY_NUM_SIZE, MODULE_DAY_NUM_SIZE);
 		view_set_module_day_layout(module_day_layout);
 	}
@@ -718,8 +710,13 @@ static void _create_base_gui(int width, int height)
 	hands_hour = _create_parts(PARTS_TYPE_HANDS_HOUR);
 	evas_object_data_set(bg, "__HANDS_HOUR__", hands_hour);
 
-	hands_sec_shadow = _create_parts(PARTS_TYPE_HANDS_SEC_SHADOW);
-	evas_object_data_set(bg, "__HANDS_SEC_SHADOW__", hands_sec_shadow);
-	hands_sec = _create_parts(PARTS_TYPE_HANDS_SEC);
-	evas_object_data_set(bg, "__HANDS_SEC__", hands_sec);
+	/*
+	 * Create layout to display second hand on the watch
+	 */
+	module_sec_layout = view_create_module_layout(bg, edj_path, "layout_module_second");
+	if (module_sec_layout)
+	{
+		view_set_module_property(module_sec_layout, 0, 0, 360, 360);
+		view_set_module_second_layout(module_sec_layout);
+	}
 }

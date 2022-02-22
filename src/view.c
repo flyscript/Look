@@ -410,6 +410,12 @@ void view_destroy_base_gui(void)
 		s_info.module_day_layout = NULL;
 	}
 
+	if (s_info.module_second_layout)
+	{
+		evas_object_del(s_info.module_second_layout);
+		s_info.module_second_layout = NULL;
+	}
+
 	if (s_info.plate)
 	{
 		evas_object_del(s_info.plate);
