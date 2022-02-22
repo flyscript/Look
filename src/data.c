@@ -167,11 +167,11 @@ void data_get_parts_position(parts_type_e type, int *x, int *y)
 		break;
 	case PARTS_TYPE_HANDS_BAT:
 		*x = get_a_centered_on_b(HANDS_BAT_WIDTH, BASE_WIDTH);
-		*y = get_a_centered_on_b(HANDS_BAT_HEIGHT, BASE_HEIGHT);
+		*y = get_a_centered_on_b(HANDS_BAT_HEIGHT, BASE_HEIGHT) - HANDS_BAT_Y_PADDING;
 		break;
 	case PARTS_TYPE_HANDS_BAT_SHADOW:
 		*x = get_a_centered_on_b(HANDS_BAT_WIDTH, BASE_WIDTH);
-		*y = get_a_centered_on_b(HANDS_BAT_HEIGHT, BASE_HEIGHT) + HANDS_BAT_SHADOW_PADDING;
+		*y = get_a_centered_on_b(HANDS_BAT_HEIGHT, BASE_HEIGHT) - HANDS_BAT_Y_PADDING;
 		break;
 	default:
 		dlog_print(DLOG_ERROR, LOG_TAG, "type error : %d", type);
