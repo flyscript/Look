@@ -17,6 +17,7 @@ This project has actually been a great way to brush back up on my C/C++ skills a
 ## Features
 - Smoothly animated second hand, that behaves akin to a real altimeter
 - Minute and Hour hands, of course
+- Shadows under each hand; adds depth, dimension, and brings the watchface into the real world
 - Date/Day readout, styled to look like an altimeter setting window
 - Battery level indicator, styled after fuel and volt gauges
 - Ambient mode, styled after green glow-in-the dark cockpit instruments
