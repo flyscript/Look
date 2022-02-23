@@ -15,6 +15,7 @@ This project has actually been a great way to brush back up on my C/C++ skills a
 - [Smooth Second Hand Animation](https://github.com/flyscript/Look#smooth-second-hand-animation)
 
 ## Features
+- Modelled after real-world aviation cockpit instrumentation for an unparalleled aesthetic
 - Smoothly animated second hand, that behaves akin to a real altimeter
 - Minute and Hour hands, of course
 - Shadows under each hand; adds depth, dimension, and brings the watchface into the real world
