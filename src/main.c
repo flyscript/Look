@@ -230,6 +230,7 @@ void app_time_tick(watch_time_h watch_time, void* user_data)
 	watch_time_get_day(watch_time, &day);
 	watch_time_get_month(watch_time, &month);
 	watch_time_get_year(watch_time, &year);
+	watch_time_get_day_of_week(watch_time, &day_of_week);
 
 	int ret = device_battery_get_percent(&battery_level);
 	if (ret != 0)
@@ -535,7 +536,7 @@ static void _set_date(int day, int month, int day_of_week)
 		snprintf(txt_day_num, sizeof(txt_day_num), "%d", day);
 		view_set_text(module_layout, "txt.day.num", txt_day_num);
 
-		snprintf(txt_day_txt, sizeof(txt_day_num), "%s", get_day_of_week(day_of_week));
+		snprintf(txt_day_txt, sizeof(txt_day_txt), "%s", get_day_of_week(day_of_week));
 		view_set_text(module_layout, "txt.day.txt", txt_day_txt);
 
 		s_info.cur_day = day;
