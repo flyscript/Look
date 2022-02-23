@@ -53,6 +53,7 @@ void data_finalize(void);
 
 void data_get_resource_path(const char *file_in, char *file_path_out, int file_path_max);
 int data_get_hour_plus_angle(int minute, int second);
+double data_get_minute_plus_angle(int second);
 char *data_get_parts_image_path(parts_type_e type);
 void data_get_parts_position(parts_type_e type, int *x, int *y);
 int data_get_parts_width_size(parts_type_e type);

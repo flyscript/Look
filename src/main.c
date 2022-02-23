@@ -432,13 +432,14 @@ static void _set_time(int hour, int min, int sec)
 		edje_object_signal_emit(hands,"second_start_tick","");
 	}
 
+	degree = (min * MIN_ANGLE) + data_get_minute_plus_angle(sec);
+	hands = evas_object_data_get(bg, "__HANDS_MIN__");
+	view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
+	hands_shadow = evas_object_data_get(bg, "__HANDS_MIN_SHADOW__");
+	view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_MIN_SHADOW_PADDING);
+
 	if (s_info.cur_min != min)
 	{
-		degree = min * MIN_ANGLE;
-		hands = evas_object_data_get(bg, "__HANDS_MIN__");
-		view_rotate_hand(hands, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2));
-		hands_shadow = evas_object_data_get(bg, "__HANDS_MIN_SHADOW__");
-		view_rotate_hand(hands_shadow, degree, (BASE_WIDTH / 2), (BASE_HEIGHT / 2) + HANDS_MIN_SHADOW_PADDING);
 		s_info.cur_min = min;
 
 		degree = (hour * HOUR_ANGLE) + data_get_hour_plus_angle(min, sec);

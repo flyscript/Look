@@ -65,6 +65,15 @@ int data_get_hour_plus_angle(int minute, int second)
 }
 
 /**
+ * @brief Get plus angle for the minute hand.
+ * @param[in] second Current second
+ */
+double data_get_minute_plus_angle(int second)
+{
+	return second / 60.0f;
+}
+
+/**
  * @brief Get a image path of the part.
  * @param[in] type The part type
  */
