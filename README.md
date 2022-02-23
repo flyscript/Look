@@ -56,7 +56,7 @@ Radium "glow-in-the-dark" paint doesn't only come in green, it can be red too! W
 Earlier on I noticed that when the minute and hour hand are close to eachother, they formed an indistinct green (or red, if on low battery) blob that was difficult to differentiate. To make reading the watchface whilst it's ambient more intuitive, I added black borders around each hand so that they are more distinguished.
 
 ### Smooth Hand Animation
-https://user-images.githubusercontent.com/39959063/155238398-24f902f2-cd0c-42a4-b180-e334fd896103.mp4
+https://user-images.githubusercontent.com/39959063/155424982-31b11dd6-2a5a-4df1-bd7a-0fdb17519ee6.mp4
 
 The second hand is animated using Edje, in 15-second increments because things get a bit loopy and glitchy if you attempt to do the 360 degree rotation in a single 60 second program. These 4 15-second programs cycle perfectly, with no noticeable effects when transitioning from one to the other, giving the effect of a completely smooth and uninterrupted rotation. The minute hand moves so short a distance over so long a time that it doesn't require such animation, and instead its angle is updated almost imperceptably each second with the tick, rather than wasting memory and battery on a whole animation cycle.
 
