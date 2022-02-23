@@ -70,7 +70,7 @@ int data_get_hour_plus_angle(int minute, int second)
  */
 double data_get_minute_plus_angle(int second)
 {
-	return second / 60.0f;
+	return (second * SEC_ANGLE) / 60.0f;
 }
 
 /**
