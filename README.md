@@ -15,14 +15,14 @@ This project has actually been a great way to brush back up on my C/C++ skills a
 - [Smooth Hand Animation](https://github.com/flyscript/Look#smooth-hand-animation)
 
 ## Features
-- Modelled after real-world aviation cockpit instrumentation for an unparalleled aesthetic
+- Second, Minute, and Hour hands (of course)
 - Smoothly animated second and minute hand, that behaves akin to a real altimeter
-- Minute and Hour hands, of course
 - Shadows under each hand; adds depth, dimension, and brings the watchface into the real world
 - Date/Day readout, styled to look like an altimeter setting window
 - Battery level indicator, styled after fuel and volt gauges
 - Ambient mode, styled after green glow-in-the dark cockpit instruments
 - Low power mode, with reduced display output and styled after red glow-in-the dark cockpit instruments
+- Modelled after real-world aviation cockpit instrumentation for an unparalleled aesthetic
 
 ## Main Watchface
 ![Main](https://user-images.githubusercontent.com/39959063/155225316-8fc0301a-a282-4879-89d3-1120acb93976.png)
