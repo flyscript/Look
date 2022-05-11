@@ -1,6 +1,6 @@
 # Look - A Tizen Watch Project
 
-![Main](https://user-images.githubusercontent.com/39959063/155225316-8fc0301a-a282-4879-89d3-1120acb93976.png)
+![image](https://user-images.githubusercontent.com/39959063/167960394-97bb13ba-ae4e-4abc-ad6a-d922f0dbbfe0.png)
 
 This watchface was designed because I was frustrated with a lack of aviation instrument-inspired designs on the Samsung Galaxy watch store, and I wanted to learn how to make my own.
 
@@ -15,6 +15,7 @@ This project has actually been a great way to brush back up on my C/C++ skills a
 - [Smooth Hand Animation](https://github.com/flyscript/Look#smooth-hand-animation)
 
 ## Features
+![Main](https://user-images.githubusercontent.com/39959063/155225316-8fc0301a-a282-4879-89d3-1120acb93976.png)
 - Second, Minute, and Hour hands (of course)
 - Smoothly animated second and minute hand, that behaves akin to a real altimeter
 - Shadows under each hand; adds depth, dimension, and brings the watchface into the real world
