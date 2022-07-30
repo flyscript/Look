@@ -5,12 +5,14 @@
 
 void view_set_module_left_layout(Evas_Object *layout);
 void view_set_module_right_layout(Evas_Object *layout);
+void view_set_module_steps_layout(Evas_Object *layout);
 void view_set_module_second_layout(Evas_Object *layout);
 void view_set_module_minute_layout(Evas_Object *layout);
 Evas_Object *view_get_bg(void);
 Evas_Object *view_get_bg_plate(void);
 Evas_Object *view_get_module_left_layout(void);
 Evas_Object *view_get_module_right_layout(void);
+Evas_Object *view_get_module_steps_layout(void);
 Evas_Object *view_get_module_second_layout(void);
 Evas_Object *view_get_module_minute_layout(void);
 

@@ -12,6 +12,7 @@ static struct view_info {
 	Evas_Object *module_left_layout;
 	Evas_Object *module_right_layout;
 	Evas_Object *module_second_layout;
+	Evas_Object *module_steps_layout;
 	Evas_Object *module_minute_layout;
 } s_info = {
 	.bg = NULL,
@@ -19,6 +20,7 @@ static struct view_info {
 	.module_left_layout = NULL,
 	.module_right_layout = NULL,
 	.module_second_layout = NULL,
+	.module_steps_layout = NULL,
 	.module_minute_layout = NULL,
 };
 
@@ -48,6 +50,20 @@ void view_set_module_right_layout(Evas_Object *layout)
 	}
 
 	s_info.module_right_layout = layout;
+}
+
+/**
+ * @brief Set the module steps layout.
+ */
+void view_set_module_steps_layout(Evas_Object *layout)
+{
+	if (layout == NULL)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "layout is NULL");
+		return;
+	}
+
+	s_info.module_steps_layout = layout;
 }
 
 /**
@@ -108,6 +124,13 @@ Evas_Object *view_get_module_left_layout(void)
 Evas_Object *view_get_module_right_layout(void)
 {
 	return s_info.module_right_layout;
+}
+
+/**
+ * @brief Get the steps layout.
+ */
+Evas_Object *view_get_module_steps_layout
+	return s_info.module_steps_layout;
 }
 
 /**
