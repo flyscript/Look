@@ -332,64 +332,64 @@ collections {
          part { name: "txt.1.num";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.1 0.5; to: "txt.0.num"; }
-               rel2 { relative: 0.1 0.5; to: "txt.0.num"; }
-               align: 1 0.5;
+               rel1 { relative: 2.15 0.5; to: "txt.0.num"; }
+               rel2 { relative: 2.15 0.5; to: "txt.0.num"; }
+               align: 0.5 0.5;
                color: 255 255 255 255;
                text {
                   font: "Tizen:style=Regular";
                   size: 20;
                   min: 1 1;
                   ellipsis: -1;
-                  text: "0";
+                  text: "6";
                }
             }
          }  
          part { name: "txt.2.num";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.1 0.5; to: "txt.1.num"; }
-               rel2 { relative: 0.1 0.5; to: "txt.1.num"; }
-               align: 1 0.5;
+               rel1 { relative: 2.15 0.5; to: "txt.1.num"; }
+               rel2 { relative: 2.15 0.5; to: "txt.1.num"; }
+               align: 0.5 0.5;
                color: 255 255 255 255;
                text {
                   font: "Tizen:style=Regular";
                   size: 20;
                   min: 1 1;
                   ellipsis: -1;
-                  text: "0";
+                  text: "9";
                }
             }
          }  
          part { name: "txt.3.num";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.1 0.5; to: "txt.2.num"; }
-               rel2 { relative: 0.1 0.5; to: "txt.2.num"; }
-               align: 1 0.5;
+               rel1 { relative: 2.15 0.5; to: "txt.2.num"; }
+               rel2 { relative: 2.15 0.5; to: "txt.2.num"; }
+               align: 0.5 0.5;
                color: 255 255 255 255;
                text {
                   font: "Tizen:style=Regular";
                   size: 20;
                   min: 1 1;
                   ellipsis: -1;
-                  text: "0";
+                  text: "6";
                }
             }
          }  
          part { name: "txt.4.num";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.1 0.5; to: "txt.3.num"; }
-               rel2 { relative: 0.1 0.5; to: "txt.3.num"; }
-               align: 1 0.5;
+               rel1 { relative: 2.15 0.5; to: "txt.3.num"; }
+               rel2 { relative: 2.15 0.5; to: "txt.3.num"; }
+               align: 0.5 0.5;
                color: 0 0 0 255;
                text {
                   font: "Tizen:style=Regular";
                   size: 20;
                   min: 1 1;
                   ellipsis: -1;
-                  text: "0";
+                  text: "9";
                }
             }
          }         

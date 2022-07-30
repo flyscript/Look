@@ -298,3 +298,38 @@ char* get_month_of_year(int monthOfYear)
 
 	return strdup(monthText);
 }
+
+char* getCounterDigit(int steps)
+{
+  if ( steps > 99999 )
+  {
+	  steps = 99999;
+  }
+
+  if ( steps < 0 )
+  {
+	  steps = 0;
+  }
+
+  char txt_steps_num[6] = { 0, };
+  int power = 10000;
+
+  for (int i=4; i>=0; i--)
+  {
+    char digitC[6] = { 0, };
+    int digitN = steps/power;
+
+    if (digitN>0)
+    {
+      digitN = steps%(power*10);
+    }
+
+	snprintf(digitC, sizeof(digitC), "%d", digitN);
+
+    txt_steps_num[4-i] = digitC[0];
+
+    power = power / 10;
+  }
+
+  return strdup(txt_steps_num);
+}

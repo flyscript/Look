@@ -129,7 +129,8 @@ Evas_Object *view_get_module_right_layout(void)
 /**
  * @brief Get the steps layout.
  */
-Evas_Object *view_get_module_steps_layout
+Evas_Object *view_get_module_steps_layout(void)
+{
 	return s_info.module_steps_layout;
 }
 

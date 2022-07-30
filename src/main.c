@@ -16,6 +16,7 @@ static struct main_info {
 	int cur_day;
 	bool heartrate_supported;
 	int cur_heartrate;
+	int cur_steps;
 	int cur_month;
 	int cur_weekday;
 	bool ambient;
@@ -27,6 +28,7 @@ static struct main_info {
 	.cur_day = 0,
 	.heartrate_supported = false,
 	.cur_heartrate = 70,
+	.cur_steps = 70,
 	.cur_month = 0,
 	.cur_weekday = 0,
 	.ambient = false,
@@ -38,6 +40,7 @@ static struct main_info {
 static void _set_time(int hour, int min, int sec);
 static void _set_date(int day, int month, int day_of_week);
 static void _set_heartrate(int rate);
+static void _set_steps(int steps);
 static void _set_battery(int bat);
 static Evas_Object *_create_parts(parts_type_e type);
 static void _create_base_gui(int width, int height);
@@ -243,7 +246,8 @@ void app_time_tick(watch_time_h watch_time, void* user_data)
 	int day = 0;
 	int day_of_week = 0;
 	int battery_level = 0;
-	int rate = 69;
+	int heart_rate = 69;
+	int step_count = 420;
 
 	watch_time_get_hour(watch_time, &hour);
 	watch_time_get_minute(watch_time, &min);
@@ -272,8 +276,11 @@ void app_time_tick(watch_time_h watch_time, void* user_data)
 	// Heart rate
 	if (s_info.heartrate_supported)
 	{
-		_set_heartrate(rate);
+		_set_heartrate(heart_rate);
 	}
+
+	// Steps
+	_set_steps(step_count);
 }
 
 /**
@@ -347,7 +354,7 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		}
 
 		// Set Step Module
-		object = view_get_module_step_layout();
+		object = view_get_module_steps_layout();
 		evas_object_hide(object);
 
 		//Set Battery Hand
@@ -398,7 +405,7 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		edje_object_signal_emit(object,"set_default","");
 
 		// Set Step Module
-		object = view_get_module_step_layout();
+		object = view_get_module_steps_layout();
 		evas_object_show(object);
 
 		//Set Battery Hand
@@ -618,6 +625,44 @@ static void _set_heartrate(int rate)
 }
 
 /**
+ * @brief Set steps on the watch.
+ * @pram[in] rate The BPM
+ */
+static void _set_steps(int steps)
+{
+	Evas_Object *module_layout = NULL;
+	char txt_steps_num[32] = { 0, };
+
+	if (s_info.cur_steps != steps) {
+		module_layout = view_get_module_steps_layout();
+
+		snprintf(txt_steps_num, sizeof(txt_steps_num), "%s", getCounterDigit(steps));
+/*
+		char steps_0[2] = { 0, };
+		snprintf(steps_0, sizeof(steps_0), "%s", txt_steps_num[0]);
+		view_set_text(module_layout, "txt.0.num", steps_0);
+
+		char steps_1[2] = { 0, };
+		snprintf(steps_1, sizeof(steps_1), "%s", txt_steps_num[1]);
+		view_set_text(module_layout, "txt.1.num", steps_1);
+
+		char steps_2[2] = { 0, };
+		snprintf(steps_2, sizeof(steps_2), "%s", txt_steps_num[2]);
+		view_set_text(module_layout, "txt.2.num", steps_2);
+
+		char steps_3[2] = { 0, };
+		snprintf(steps_3, sizeof(steps_3), "%s", txt_steps_num[3]);
+		view_set_text(module_layout, "txt.3.num", steps_3);
+
+		char steps_4[2] = { 0, };
+		snprintf(steps_4, sizeof(steps_4), "%s", txt_steps_num[4]);
+		view_set_text(module_layout, "txt.4.num", steps_4);
+*/
+		s_info.cur_steps = steps;
+	}
+}
+
+/**
  * @brief Create parts of watch.
  * @param[in] type Parts type
  */
@@ -767,14 +812,13 @@ static void _create_base_gui(int width, int height)
 	module_steps_layout = view_create_module_layout(bg, edj_path, "layout_module_steps");
 	if (module_right_layout)
 	{
-		view_set_module_property(module_steps_layout, BASE_WIDTH - WATCH_RIGHT_MODULE_SIZE - WATCH_RIGHT_MODULE_LEFT_PADDING, (BASE_HEIGHT / 2) - (WATCH_RIGHT_MODULE_SIZE / 2), WATCH_RIGHT_MODULE_SIZE, WATCH_RIGHT_MODULE_SIZE);
+		view_set_module_property(module_steps_layout, (BASE_WIDTH / 2) - (WATCH_STEPS_MODULE_SIZE_X/2) + WATCH_STEPS_MODULE_PADDING_X, (BASE_HEIGHT / 2) - (WATCH_STEPS_MODULE_SIZE_Y / 2) + WATCH_STEPS_MODULE_PADDING_Y, WATCH_STEPS_MODULE_SIZE_X, WATCH_STEPS_MODULE_SIZE_Y);
 		view_set_module_steps_layout(module_steps_layout);
 	}
 
 	/*
 	 * Create hands & shadow hands to display at the watch
 	 */
-
 	hands_min_shadow = _create_parts(PARTS_TYPE_HANDS_MIN_SHADOW);
 	evas_object_data_set(bg, "__HANDS_MIN_SHADOW__", hands_min_shadow);
 	hands_min = _create_parts(PARTS_TYPE_HANDS_MIN);

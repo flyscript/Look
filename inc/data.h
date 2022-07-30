@@ -1,7 +1,7 @@
 #if !defined(_DATA_H)
 #define _DATA_H
 
-#define IMAGE_BG "images/watch_bg2.png"
+#define IMAGE_BG "images/watch_bg3.png"
 #define IMAGE_BG_AMBIENT "images/watch_bg_ambient2.png"
 #define IMAGE_BG_AMBIENT_LOWBAT "images/watch_bg_ambient_low_battery2.png"
 #define IMAGE_BG_PLATE "images/watch_bg_plate.png"
@@ -76,5 +76,6 @@ bool set_object_background_image(Evas_Object* obj, const char* image);
 
 char* get_day_of_week(int day);
 char* get_month_of_year(int monthOfYear);
+char* getCounterDigit(int steps);
 
 #endif
