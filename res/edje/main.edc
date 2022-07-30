@@ -438,8 +438,8 @@ collections {
          part { name: "left_module_fg";
             type: IMAGE;
             description { state: "default" 0.0;
-               rel1 { relative: 0.5 0.5; to: "left_module_fg"; }
-               rel2 { relative: 0.5 0.5; to: "left_module_fg"; }
+               rel1 { relative: 0.5 0.5; to: "left_module_bg"; }
+               rel2 { relative: 0.5 0.5; to: "left_module_bg"; }
                min: 100 100;
                max: 100 100;
                image { normal: "watch_left_module_fg.png"; }

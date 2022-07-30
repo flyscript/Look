@@ -333,6 +333,11 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		// Set Left & Right Modules
 		object = view_get_module_left_layout();
 		edje_object_signal_emit(object,"set_ambient","");
+		if (s_info.low_battery)
+		{
+			evas_object_hide(object);
+		}
+
 		object = view_get_module_right_layout();
 		edje_object_signal_emit(object,"set_ambient","");
 
@@ -730,20 +735,20 @@ static void _create_base_gui(int width, int height)
 	/*
 	 * Create layout to display left module on watch
 	 */
-	module_left_layout = view_create_module_layout(bg, edj_path, "module_left_layout");
+	module_left_layout = view_create_module_layout(bg, edj_path, "layout_module_left");
 	if (module_left_layout)
 	{
-		view_set_module_property(module_left_layout, BASE_WIDTH - MODULE_DAY_NUM_SIZE - MODULE_DAY_NUM_RIGHT_PADDING, (BASE_HEIGHT / 2) - (MODULE_DAY_NUM_SIZE / 2), MODULE_DAY_NUM_SIZE, MODULE_DAY_NUM_SIZE);
+		view_set_module_property(module_left_layout, WATCH_LEFT_MODULE_RIGHT_PADDING, (BASE_HEIGHT / 2) - (WATCH_LEFT_MODULE_SIZE / 2), WATCH_LEFT_MODULE_SIZE, WATCH_LEFT_MODULE_SIZE);
 		view_set_module_left_layout(module_left_layout);
 	}
 
 	/*
 	 * Create layout to display right module on watch
 	 */
-	module_right_layout = view_create_module_layout(bg, edj_path, "module_right_layout");
-	if (module_left_layout)
+	module_right_layout = view_create_module_layout(bg, edj_path, "layout_module_right");
+	if (module_right_layout)
 	{
-		view_set_module_property(module_right_layout, BASE_WIDTH - MODULE_DAY_NUM_SIZE - MODULE_DAY_NUM_RIGHT_PADDING, (BASE_HEIGHT / 2) - (MODULE_DAY_NUM_SIZE / 2), MODULE_DAY_NUM_SIZE, MODULE_DAY_NUM_SIZE);
+		view_set_module_property(module_right_layout, BASE_WIDTH - WATCH_RIGHT_MODULE_SIZE - WATCH_RIGHT_MODULE_LEFT_PADDING, (BASE_HEIGHT / 2) - (WATCH_RIGHT_MODULE_SIZE / 2), WATCH_RIGHT_MODULE_SIZE, WATCH_RIGHT_MODULE_SIZE);
 		view_set_module_right_layout(module_right_layout);
 	}
 
