@@ -9,21 +9,23 @@
 static struct view_info {
 	Evas_Object *bg;
 	Evas_Object *plate;
-	Evas_Object *module_day_layout;
+	Evas_Object *module_left_layout;
+	Evas_Object *module_right_layout;
 	Evas_Object *module_second_layout;
 	Evas_Object *module_minute_layout;
 } s_info = {
 	.bg = NULL,
 	.plate = NULL,
-	.module_day_layout = NULL,
+	.module_left_layout = NULL,
+	.module_right_layout = NULL,
 	.module_second_layout = NULL,
 	.module_minute_layout = NULL,
 };
 
 /**
- * @brief Set the module day layout.
+ * @brief Set the module left layout.
  */
-void view_set_module_day_layout(Evas_Object *layout)
+void view_set_module_left_layout(Evas_Object *layout)
 {
 	if (layout == NULL)
 	{
@@ -31,7 +33,21 @@ void view_set_module_day_layout(Evas_Object *layout)
 		return;
 	}
 
-	s_info.module_day_layout = layout;
+	s_info.module_left_layout = layout;
+}
+
+/**
+ * @brief Set the module right layout.
+ */
+void view_set_module_right_layout(Evas_Object *layout)
+{
+	if (layout == NULL)
+	{
+		dlog_print(DLOG_ERROR, LOG_TAG, "layout is NULL");
+		return;
+	}
+
+	s_info.module_right_layout = layout;
 }
 
 /**
@@ -79,11 +95,19 @@ Evas_Object *view_get_bg_plate(void)
 }
 
 /**
- * @brief Get the module day layout.
+ * @brief Get the module left layout.
  */
-Evas_Object *view_get_module_day_layout(void)
+Evas_Object *view_get_module_left_layout(void)
 {
-	return s_info.module_day_layout;
+	return s_info.module_left_layout;
+}
+
+/**
+ * @brief Get the module right layout.
+ */
+Evas_Object *view_get_module_right_layout(void)
+{
+	return s_info.module_right_layout;
 }
 
 /**
@@ -388,10 +412,15 @@ Evas_Object *view_create_parts(Evas_Object *parent, const char *image_path, int 
  */
 void view_destroy_base_gui(void)
 {
-	if (s_info.module_day_layout)
+	if (s_info.module_left_layout)
 	{
-		evas_object_del(s_info.module_day_layout);
-		s_info.module_day_layout = NULL;
+		evas_object_del(s_info.module_left_layout);
+		s_info.module_left_layout = NULL;
+	}
+	if (s_info.module_right_layout)
+	{
+		evas_object_del(s_info.module_right_layout);
+		s_info.module_right_layout = NULL;
 	}
 
 	if (s_info.module_second_layout)

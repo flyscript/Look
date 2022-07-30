@@ -279,10 +279,22 @@ int data_get_parts_height_size(parts_type_e type)
 
 char* get_day_of_week(int day)
 {
-	char months[8][3] = {"SAT", "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
+	char days[8][3] = {"SAT", "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
 	char weekday[4] = { 0, };
 
-	snprintf(weekday, sizeof(weekday), "%s", months + day);
+	snprintf(weekday, sizeof(weekday), "%s", days + day);
 
 	return strdup(weekday);
+}
+
+
+
+char* get_month_of_year(int monthOfYear)
+{
+	char months[13][3] = {"DEC", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
+	char monthText[4] = { 0, };
+
+	snprintf(monthText, sizeof(monthText), "%s", months + monthOfYear);
+
+	return strdup(monthText);
 }

@@ -312,21 +312,21 @@ collections {
    }
    
    group {
-   	  name: "layout_module_day";
+   	  name: "layout_module_left";
       images {
-         image: "watch_day_num_bg.png" COMP;
-         image: "watch_day_num_bg_ambient.png" COMP;
-         image: "watch_day_num_fg.png" COMP;
+         image: "watch_left_module_bg.png" COMP;
+         image: "watch_left_module_bg_ambient.png" COMP;
+         image: "watch_left_module_fg.png" COMP;
       }
       parts {
-         part { name: "day_num_bg";
+         part { name: "left_module_bg";
             type: IMAGE;
             description { state: "default" 0.0;
                rel1 { relative: 0.5 0.5; }
                rel2 { relative: 0.5 0.5; }
                min: 100 100;
                max: 100 100;
-               image { normal: "watch_day_num_bg.png"; }
+               image { normal: "watch_left_module_bg.png"; }
                map
                {
                   on: 1;
@@ -342,22 +342,22 @@ collections {
             }
             description { state: "jiggle" 0.0;
                inherit: "default" 0.0;
-               map.rotation.z: 5.0;               
+               map.rotation.z: -5.0;               
             }
             description { state: "jiggle_back" 0.0;
                inherit: "default" 0.0;
-               map.rotation.z: -5.0;               
+               map.rotation.z: 5.0;               
             }
             description { state: "ambient" 0.0;
                inherit: "default" 0.0;
-               image { normal: "watch_day_num_bg_ambient.png"; }
+               image { normal: "watch_left_module_bg_ambient.png"; }
             }
          }
          part { name: "txt.day.num";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.475 0.325; to: "day_num_bg"; }
-               rel2 { relative: 0.475 0.325; to: "day_num_bg"; }
+               rel1 { relative: 0.475 0.325; to: "left_module_bg"; }
+               rel2 { relative: 0.475 0.325; to: "left_module_bg"; }
                align: 0.45 0.3;
                color: 255 255 255 255;
                text {
@@ -374,7 +374,7 @@ collections {
                   perspective_on: 1;
                   rotation
                   {
-                  	 center: "day_num_bg";
+                  	 center: "left_module_bg";
                      z: 0;
                      x: 0;
                      y: 0;
@@ -383,15 +383,11 @@ collections {
             }
             description { state: "jiggle" 0.0;
                inherit: "default" 0.0;
-               map.rotation.z: 0.4;               
-            }
-            description { state: "jiggle" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: 5.0;               
+               map.rotation.z: -5.0;               
             }
             description { state: "jiggle_back" 0.0;
                inherit: "default" 0.0;
-               map.rotation.z: -5.0;               
+               map.rotation.z: 5.0;               
             }
             description { state: "ambient" 0.0;
                inherit: "default" 0.0;
@@ -401,8 +397,8 @@ collections {
          part { name: "txt.day.txt";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.475 0.7; to: "day_num_bg"; }
-               rel2 { relative: 0.475 0.7; to: "day_num_bg"; }
+               rel1 { relative: 0.475 0.7; to: "left_module_bg"; }
+               rel2 { relative: 0.475 0.7; to: "left_module_bg"; }
                align: 0.5 0.75;
                color: 255 255 255 255;
                text {
@@ -419,7 +415,7 @@ collections {
                   perspective_on: 1;
                   rotation
                   {
-                  	 center: "day_num_bg";
+                  	 center: "left_module_bg";
                      z: 0;
                      x: 0;
                      y: 0;
@@ -428,25 +424,25 @@ collections {
             }
             description { state: "jiggle" 0.0;
                inherit: "default" 0.0;
-               map.rotation.z: 5.0;               
+               map.rotation.z: -5.0;               
             }
             description { state: "jiggle_back" 0.0;
                inherit: "default" 0.0;
-               map.rotation.z: -5.0;               
+               map.rotation.z: 5.0;               
             }
             description { state: "ambient" 0.0;
                inherit: "default" 0.0;
                color: 75 225 75 255;
             }
          }
-         part { name: "day_num_fg";
+         part { name: "left_module_fg";
             type: IMAGE;
             description { state: "default" 0.0;
-               rel1 { relative: 0.5 0.5; to: "day_num_bg"; }
-               rel2 { relative: 0.5 0.5; to: "day_num_bg"; }
+               rel1 { relative: 0.5 0.5; to: "left_module_fg"; }
+               rel2 { relative: 0.5 0.5; to: "left_module_fg"; }
                min: 100 100;
                max: 100 100;
-               image { normal: "watch_day_num_fg.png"; }
+               image { normal: "watch_left_module_fg.png"; }
                map
                {
                   on: 1;
@@ -473,7 +469,7 @@ collections {
    			signal: "mouse,clicked,1";
        		source: "*";
        		action: STATE_SET "jiggle" 0.0;
-       		target: "day_num_bg";
+       		target: "left_module_bg";
 	      	target: "txt.day.txt";
 	      	target: "txt.day.num";
 	      	transition: SPRING 1.0 2.5 2;
@@ -485,7 +481,7 @@ collections {
    			signal: "jiggle_back";
        		source: "*";
        		action: STATE_SET "jiggle_back" 0.0;
-       		target: "day_num_bg";
+       		target: "left_module_bg";
 	      	target: "txt.day.txt";
 	      	target: "txt.day.num";
 	      	transition: SPRING 1.0 2.5 2;
@@ -497,7 +493,7 @@ collections {
        		signal: "reset_jiggle";
        		source: "*";
        		action: STATE_SET "default" 0.0;
-       		target: "day_num_bg";
+       		target: "left_module_bg";
 	      	target: "txt.day.txt";
 	      	target: "txt.day.num";
 	      	transition: SPRING 2.0 2.0 4;
@@ -509,10 +505,10 @@ collections {
 	      signal: "set_ambient";
 	      source: "*";
 	      action: STATE_SET "ambient" 0.0;
-	      target: "day_num_bg";
+	      target: "left_module_bg";
 	      target: "txt.day.txt";
 	      target: "txt.day.num";
-	      target: "day_num_fg";
+	      target: "left_module_fg";
 	      transition: LINEAR 0.0;
 	   }
 	   program 
@@ -521,10 +517,229 @@ collections {
 	      signal: "set_default";
 	      source: "*";
 	      action: STATE_SET "default" 0.0;
-	      target: "day_num_bg";
+	      target: "left_module_bg";
 	      target: "txt.day.txt";
 	      target: "txt.day.num";
-	      target: "day_num_fg";
+	      target: "left_module_fg";
+	      transition: LINEAR 0.0;
+	   }
+      }
+   } 
+   
+   group {
+   	  name: "layout_module_right";
+      images {
+         image: "watch_right_module_bg.png" COMP;
+         image: "watch_right_module_bg_ambient.png" COMP;
+         image: "watch_right_module_fg.png" COMP;
+      }
+      parts {
+         part { name: "right_module_bg";
+            type: IMAGE;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.5 0.5; }
+               rel2 { relative: 0.5 0.5; }
+               min: 100 100;
+               max: 100 100;
+               image { normal: "watch_right_module_bg.png"; }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 5.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -5.0;               
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               image { normal: "watch_right_module_bg_ambient.png"; }
+            }
+         }
+         part { name: "txt.heartrate.num";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.475 0.325; to: "right_module_bg"; }
+               rel2 { relative: 0.475 0.325; to: "right_module_bg"; }
+               align: 0.45 0.3;
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 20;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "70";
+               }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                  	 center: "right_module_bg";
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 0.4;               
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 5.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -5.0;               
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               color: 75 225 75 255;
+            }
+         }
+         part { name: "txt.heartrate.txt";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.475 0.7; to: "right_module_bg"; }
+               rel2 { relative: 0.475 0.7; to: "right_module_bg"; }
+               align: 0.5 0.75;
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 18;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "BPM";
+               }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                  	 center: "right_module_bg";
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 5.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -5.0;               
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               color: 75 225 75 255;
+            }
+         }
+         part { name: "right_module_fg";
+            type: IMAGE;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.5 0.5; to: "right_module_bg"; }
+               rel2 { relative: 0.5 0.5; to: "right_module_bg"; }
+               min: 100 100;
+               max: 100 100;
+               image { normal: "watch_right_module_fg.png"; }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               color: 0 0 0 0;
+            }
+         }
+      }
+      programs {
+       program
+       {
+       		name: "jiggle";
+   			signal: "mouse,clicked,1";
+       		source: "*";
+       		action: STATE_SET "jiggle" 0.0;
+       		target: "right_module_bg";
+	      	target: "txt.heartrate.num";
+	      	target: "txt.heartrate.txt";
+	      	transition: SPRING 1.0 2.5 2;
+       		after: "jiggle_back";
+       }
+       program
+       {
+       		name: "jiggle_back";
+   			signal: "jiggle_back";
+       		source: "*";
+       		action: STATE_SET "jiggle_back" 0.0;
+       		target: "right_module_bg";
+	      	target: "txt.heartrate.num";
+	      	target: "txt.heartrate.txt";
+	      	transition: SPRING 1.0 2.5 2;
+       		after: "reset_jiggle";
+       }
+       program
+       {
+       		name: "reset_jiggle";
+       		signal: "reset_jiggle";
+       		source: "*";
+       		action: STATE_SET "default" 0.0;
+       		target: "right_module_bg";
+	      	target: "txt.heartrate.num";
+	      	target: "txt.heartrate.txt";
+	      	transition: SPRING 2.0 2.0 4;
+       		
+       }
+	   program 
+	   { 
+	      name: "set_ambient";
+	      signal: "set_ambient";
+	      source: "*";
+	      action: STATE_SET "ambient" 0.0;
+	      target: "right_module_bg";
+	      target: "txt.heartrate.num";
+	      target: "txt.heartrate.txt";
+	      target: "right_module_fg";
+	      transition: LINEAR 0.0;
+	   }
+	   program 
+	   { 
+	      name: "set_default";
+	      signal: "set_default";
+	      source: "*";
+	      action: STATE_SET "default" 0.0;
+	      target: "right_module_bg";
+	      target: "txt.heartrate.num";
+	      target: "txt.heartrate.txt";
+	      target: "right_module_fg";
 	      transition: LINEAR 0.0;
 	   }
       }

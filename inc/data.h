@@ -1,9 +1,9 @@
 #if !defined(_DATA_H)
 #define _DATA_H
 
-#define IMAGE_BG "images/watch_bg.png"
-#define IMAGE_BG_AMBIENT "images/watch_bg_ambient.png"
-#define IMAGE_BG_AMBIENT_LOWBAT "images/watch_bg_ambient_low_battery.png"
+#define IMAGE_BG "images/watch_bg2.png"
+#define IMAGE_BG_AMBIENT "images/watch_bg_ambient2.png"
+#define IMAGE_BG_AMBIENT_LOWBAT "images/watch_bg_ambient_low_battery2.png"
 #define IMAGE_BG_PLATE "images/watch_bg_plate.png"
 #define IMAGE_HANDS_BAT "images/watch_hand_battery.png"
 #define IMAGE_HANDS_BAT_LOWBAT "images/watch_hand_battery_low_battery.png"
@@ -75,5 +75,6 @@ static int get_a_centered_on_b(int sizeA, int sizeB)
 bool set_object_background_image(Evas_Object* obj, const char* image);
 
 char* get_day_of_week(int day);
+char* get_month_of_year(int monthOfYear);
 
 #endif

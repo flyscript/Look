@@ -14,6 +14,8 @@
 static struct main_info {
 	int sec_min_restart;
 	int cur_day;
+	bool heartrate_supported;
+	int cur_heartrate;
 	int cur_month;
 	int cur_weekday;
 	bool ambient;
@@ -23,6 +25,8 @@ static struct main_info {
 } s_info = {
 	.sec_min_restart = 0,
 	.cur_day = 0,
+	.heartrate_supported = false,
+	.cur_heartrate = 70,
 	.cur_month = 0,
 	.cur_weekday = 0,
 	.ambient = false,
@@ -33,6 +37,7 @@ static struct main_info {
 
 static void _set_time(int hour, int min, int sec);
 static void _set_date(int day, int month, int day_of_week);
+static void _set_heartrate(int rate);
 static void _set_battery(int bat);
 static Evas_Object *_create_parts(parts_type_e type);
 static void _create_base_gui(int width, int height);
@@ -148,6 +153,21 @@ static bool app_create(int width, int height, void* user_data)
 	 */
 	_create_base_gui(width, height);
 
+	// Check features
+	/*sensor_type_e type = SENSOR_HRM;
+	sensor_h sensor;
+
+	bool heartrateSupported;
+	int error = sensor_is_supported(type, &heartrateSupported);
+	if (error != SENSOR_ERROR_NONE)
+	{
+	    dlog_print(DLOG_ERROR, LOG_TAG, "sensor_is_supported error: %d", error);
+	}
+
+    dlog_print(DLOG_DEBUG, LOG_TAG, "HRM is%s supported", supported ? "" : " not");
+*/
+    s_info.heartrate_supported = true;//heartrateSupported;
+
 	return true;
 }
 
@@ -223,6 +243,7 @@ void app_time_tick(watch_time_h watch_time, void* user_data)
 	int day = 0;
 	int day_of_week = 0;
 	int battery_level = 0;
+	int rate = 69;
 
 	watch_time_get_hour(watch_time, &hour);
 	watch_time_get_minute(watch_time, &min);
@@ -239,9 +260,20 @@ void app_time_tick(watch_time_h watch_time, void* user_data)
 		return;
 	}
 
+	// Time
 	_set_time(hour, min, sec);
+
+	// Date
 	_set_date(day, month, day_of_week);
+
+	// Battery
 	_set_battery(battery_level);
+
+	// Heart rate
+	if (s_info.heartrate_supported)
+	{
+		_set_heartrate(rate);
+	}
 }
 
 /**
@@ -298,8 +330,10 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		object = view_get_bg_plate();
 		evas_object_hide(object);
 
-		// Set Day
-		object = view_get_module_day_layout();
+		// Set Left & Right Modules
+		object = view_get_module_left_layout();
+		edje_object_signal_emit(object,"set_ambient","");
+		object = view_get_module_right_layout();
 		edje_object_signal_emit(object,"set_ambient","");
 
 		if (s_info.low_battery)
@@ -346,8 +380,11 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		object = view_get_bg_plate();
 		evas_object_show(object);
 
-		//Set Day
-		object = view_get_module_day_layout();
+		// Set Left & Right Modules
+		object = view_get_module_left_layout();
+		evas_object_show(object);
+		edje_object_signal_emit(object,"set_default","");
+		object = view_get_module_right_layout();
 		evas_object_show(object);
 		edje_object_signal_emit(object,"set_default","");
 
@@ -483,7 +520,8 @@ static void _set_battery(int bat)
 		if (s_info.ambient)
 		{
 			set_object_background_image(bg, IMAGE_BG_AMBIENT_LOWBAT);
-			evas_object_hide(view_get_module_day_layout());
+			evas_object_hide(view_get_module_left_layout());
+			evas_object_hide(view_get_module_right_layout());
 			set_object_background_image(evas_object_data_get(bg, "__HANDS_MIN__"), IMAGE_HANDS_MIN_AMBIENT_LOWBAT);
 			set_object_background_image(evas_object_data_get(bg, "__HANDS_HOUR__"), IMAGE_HANDS_HOUR_AMBIENT_LOWBAT);
 		}
@@ -498,7 +536,8 @@ static void _set_battery(int bat)
 		if (s_info.ambient)
 		{
 			set_object_background_image(bg, IMAGE_BG_AMBIENT);
-			evas_object_show(view_get_module_day_layout());
+			evas_object_show(view_get_module_left_layout());
+			evas_object_show(view_get_module_right_layout());
 			set_object_background_image(evas_object_data_get(bg, "__HANDS_MIN__"), IMAGE_HANDS_MIN_AMBIENT);
 			set_object_background_image(evas_object_data_get(bg, "__HANDS_HOUR__"), IMAGE_HANDS_HOUR_AMBIENT);
 		}
@@ -516,23 +555,22 @@ static void _set_battery(int bat)
 }
 
 /**
- * @brief Set date at the watch.
+ * @brief Set date on the watch.
  * @pram[in] day The day number
  * @pram[in] month The month number
  * @pram[in] day_of_week The day of week number
  */
 static void _set_date(int day, int month, int day_of_week)
 {
-	Evas_Object *bg = NULL;
 	Evas_Object *module_layout = NULL;
 	char txt_day_num[32] = { 0, };
 	char txt_day_txt[4] = { 0, };
 
 	/*
-	 * Set day at the watch
+	 * Set day on the watch
 	 */
 	if (s_info.cur_day != day) {
-		module_layout = view_get_module_day_layout();
+		module_layout = view_get_module_left_layout();
 
 		snprintf(txt_day_num, sizeof(txt_day_num), "%d", day);
 		view_set_text(module_layout, "txt.day.num", txt_day_num);
@@ -542,11 +580,27 @@ static void _set_date(int day, int month, int day_of_week)
 
 		s_info.cur_day = day;
 	}
+}
 
-	bg = view_get_bg();
-	if (bg == NULL) {
-		dlog_print(DLOG_ERROR, LOG_TAG, "Failed to get bg");
-		return;
+/**
+ * @brief Set heart rate on the watch.
+ * @pram[in] rate The BPM
+ */
+static void _set_heartrate(int rate)
+{
+	Evas_Object *module_layout = NULL;
+	char txt_rate_num[32] = { 0, };
+
+	/*
+	 * Set heart rate on the watch
+	 */
+	if (s_info.cur_heartrate != rate) {
+		module_layout = view_get_module_right_layout();
+
+		snprintf(txt_rate_num, sizeof(txt_rate_num), "%d", rate);
+		view_set_text(module_layout, "txt.heartrate.num", txt_rate_num);
+
+		s_info.cur_heartrate = rate;
 	}
 }
 
@@ -606,7 +660,8 @@ static void _create_base_gui(int width, int height)
 	Evas_Object *win = NULL;
 	Evas_Object *bg = NULL;
 	Evas_Object *bg_plate = NULL;
-	Evas_Object *module_day_layout = NULL;
+	Evas_Object *module_left_layout = NULL;
+	Evas_Object *module_right_layout = NULL;
 	Evas_Object *module_sec_layout = NULL;
 	Evas_Object *hands_min = NULL;
 	Evas_Object *hands_min_shadow = NULL;
@@ -673,13 +728,23 @@ static void _create_base_gui(int width, int height)
 	data_get_resource_path(EDJ_FILE, edj_path, sizeof(edj_path));
 
 	/*
-	 * Create layout to display day number at the watch
+	 * Create layout to display left module on watch
 	 */
-	module_day_layout = view_create_module_layout(bg, edj_path, "layout_module_day");
-	if (module_day_layout)
+	module_left_layout = view_create_module_layout(bg, edj_path, "module_left_layout");
+	if (module_left_layout)
 	{
-		view_set_module_property(module_day_layout, BASE_WIDTH - MODULE_DAY_NUM_SIZE - MODULE_DAY_NUM_RIGHT_PADDING, (BASE_HEIGHT / 2) - (MODULE_DAY_NUM_SIZE / 2), MODULE_DAY_NUM_SIZE, MODULE_DAY_NUM_SIZE);
-		view_set_module_day_layout(module_day_layout);
+		view_set_module_property(module_left_layout, BASE_WIDTH - MODULE_DAY_NUM_SIZE - MODULE_DAY_NUM_RIGHT_PADDING, (BASE_HEIGHT / 2) - (MODULE_DAY_NUM_SIZE / 2), MODULE_DAY_NUM_SIZE, MODULE_DAY_NUM_SIZE);
+		view_set_module_left_layout(module_left_layout);
+	}
+
+	/*
+	 * Create layout to display right module on watch
+	 */
+	module_right_layout = view_create_module_layout(bg, edj_path, "module_right_layout");
+	if (module_left_layout)
+	{
+		view_set_module_property(module_right_layout, BASE_WIDTH - MODULE_DAY_NUM_SIZE - MODULE_DAY_NUM_RIGHT_PADDING, (BASE_HEIGHT / 2) - (MODULE_DAY_NUM_SIZE / 2), MODULE_DAY_NUM_SIZE, MODULE_DAY_NUM_SIZE);
+		view_set_module_right_layout(module_right_layout);
 	}
 
 	/*

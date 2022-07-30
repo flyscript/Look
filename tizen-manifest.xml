@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<manifest xmlns="http://tizen.org/ns/packages" api-version="2.3.1" package="org.example.look" version="1.2.1">
+<manifest xmlns="http://tizen.org/ns/packages" api-version="2.3.1" package="org.example.look2" version="1.2.1">
     <profile name="wearable"/>
-    <watch-application ambient-support="true" appid="org.example.look" exec="look">
-        <label>look</label>
-        <icon>look.png</icon>
+    <watch-application ambient-support="true" appid="org.example.look2" exec="look2">
+        <label>look2</label>
+        <icon>look2.png</icon>
     </watch-application>
     <privileges>
         <privilege>http://tizen.org/privilege/systemmonitor</privilege>
+        <privilege>http://tizen.org/privilege/healthinfo</privilege>
     </privileges>
 </manifest>
