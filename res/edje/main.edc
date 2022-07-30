@@ -348,8 +348,8 @@ collections {
          part { name: "txt.2.num";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.1 0.5; to: "txt.0.num"; }
-               rel2 { relative: 0.1 0.5; to: "txt.0.num"; }
+               rel1 { relative: 0.1 0.5; to: "txt.1.num"; }
+               rel2 { relative: 0.1 0.5; to: "txt.1.num"; }
                align: 1 0.5;
                color: 255 255 255 255;
                text {
@@ -364,8 +364,8 @@ collections {
          part { name: "txt.3.num";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.1 0.5; to: "txt.0.num"; }
-               rel2 { relative: 0.1 0.5; to: "txt.0.num"; }
+               rel1 { relative: 0.1 0.5; to: "txt.2.num"; }
+               rel2 { relative: 0.1 0.5; to: "txt.2.num"; }
                align: 1 0.5;
                color: 255 255 255 255;
                text {
@@ -380,10 +380,10 @@ collections {
          part { name: "txt.4.num";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.1 0.5; to: "txt.0.num"; }
-               rel2 { relative: 0.1 0.5; to: "txt.0.num"; }
+               rel1 { relative: 0.1 0.5; to: "txt.3.num"; }
+               rel2 { relative: 0.1 0.5; to: "txt.3.num"; }
                align: 1 0.5;
-               color: 255 255 255 255;
+               color: 0 0 0 255;
                text {
                   font: "Tizen:style=Regular";
                   size: 20;

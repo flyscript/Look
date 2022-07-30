@@ -2,13 +2,13 @@
 #define _CLASSIC_WATCH_H
 
 #if !defined(PACKAGE)
-#define PACKAGE "org.example.look2"
+#define PACKAGE "org.example.look3"
 #endif
 
 #ifdef  LOG_TAG
 #undef  LOG_TAG
 #endif
-#define LOG_TAG "look2"
+#define LOG_TAG "look3"
 
 /* Angle */
 #define HOUR_ANGLE 30
@@ -16,7 +16,7 @@
 #define SEC_ANGLE 6
 #define MONTH_ANGLE 30
 #define WEEKDAY_ANGLE 51
-#define BATTERY_START_ANGLE 150
+#define BATTERY_START_ANGLE 45
 #define BATTERY_ANGLE 0.6f
 
 /* Layout */
