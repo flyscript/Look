@@ -440,10 +440,17 @@ void view_destroy_base_gui(void)
 		evas_object_del(s_info.module_left_layout);
 		s_info.module_left_layout = NULL;
 	}
+
 	if (s_info.module_right_layout)
 	{
 		evas_object_del(s_info.module_right_layout);
 		s_info.module_right_layout = NULL;
+	}
+
+	if (s_info.module_steps_layout)
+	{
+		evas_object_del(s_info.module_steps_layout);
+		s_info.module_steps_layout = NULL;
 	}
 
 	if (s_info.module_second_layout)

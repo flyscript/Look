@@ -346,6 +346,10 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 			evas_object_hide(object);
 		}
 
+		// Set Step Module
+		object = view_get_module_step_layout();
+		evas_object_hide(object);
+
 		//Set Battery Hand
 		hands = evas_object_data_get(bg, "__HANDS_BAT__");
 		evas_object_hide(hands);
@@ -392,6 +396,10 @@ void app_ambient_changed(bool ambient_mode, void* user_data)
 		object = view_get_module_right_layout();
 		evas_object_show(object);
 		edje_object_signal_emit(object,"set_default","");
+
+		// Set Step Module
+		object = view_get_module_step_layout();
+		evas_object_show(object);
 
 		//Set Battery Hand
 		hands = evas_object_data_get(bg, "__HANDS_BAT__");
@@ -667,6 +675,7 @@ static void _create_base_gui(int width, int height)
 	Evas_Object *bg_plate = NULL;
 	Evas_Object *module_left_layout = NULL;
 	Evas_Object *module_right_layout = NULL;
+	Evas_Object *module_steps_layout = NULL;
 	Evas_Object *module_sec_layout = NULL;
 	Evas_Object *hands_min = NULL;
 	Evas_Object *hands_min_shadow = NULL;
@@ -750,6 +759,16 @@ static void _create_base_gui(int width, int height)
 	{
 		view_set_module_property(module_right_layout, BASE_WIDTH - WATCH_RIGHT_MODULE_SIZE - WATCH_RIGHT_MODULE_LEFT_PADDING, (BASE_HEIGHT / 2) - (WATCH_RIGHT_MODULE_SIZE / 2), WATCH_RIGHT_MODULE_SIZE, WATCH_RIGHT_MODULE_SIZE);
 		view_set_module_right_layout(module_right_layout);
+	}
+
+	/*
+	 * Create layout to display steps module on watch
+	 */
+	module_steps_layout = view_create_module_layout(bg, edj_path, "layout_module_steps");
+	if (module_right_layout)
+	{
+		view_set_module_property(module_steps_layout, BASE_WIDTH - WATCH_RIGHT_MODULE_SIZE - WATCH_RIGHT_MODULE_LEFT_PADDING, (BASE_HEIGHT / 2) - (WATCH_RIGHT_MODULE_SIZE / 2), WATCH_RIGHT_MODULE_SIZE, WATCH_RIGHT_MODULE_SIZE);
+		view_set_module_steps_layout(module_steps_layout);
 	}
 
 	/*
