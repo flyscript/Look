@@ -311,6 +311,352 @@ collections {
       }
    }
    
+   ////////////////////////////////////////////////////////////////
+   // NEW SINGULAR FACE
+   ////////////////////////////////////////////////////////////////
+   
+   group {
+      name: "layout_watch_face";
+      parts {
+         part { name: "img.watch.bg"
+           	type: IMAGE; 				
+	        description { state: "default" 0.0;
+	           rel1 { relative: 0.0 0.0; }
+	           rel2 { relative: 1.0 1.0; }
+	           color: 255 255 0 255;
+	           min: 360 360;
+	           max: 360 360;
+	          // image { normal: "watch_hand_min.png"; }
+	        }
+		 }
+		 
+         part { name: "img.leftdial.bg"
+           	type: IMAGE; 				
+	        description { state: "default" 0.0;
+	           rel1 { relative: 0.0 0.0; }
+	           rel2 { relative: 1.0 1.0; }
+	           color: 255 255 0 255;
+	           min: 360 360;
+	           max: 360 360;
+	           image { normal: "watch_dial_left_bg.png"; }
+	           
+	        }	 
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -5.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 5.0;               
+            }       
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               image { normal: "watch_dial_left_bg_ambient.png"; }
+            }
+		 }
+		 
+         part { name: "img.rightdial.bg"
+           	type: IMAGE; 				
+	        description { state: "default" 0.0;
+	           rel1 { relative: 0.0 0.0; }
+	           rel2 { relative: 1.0 1.0; }
+	           color: 255 255 0 255;
+	           min: 360 360;
+	           max: 360 360;
+	           image { normal: "watch_dial_right_bg.png"; }
+	           
+	        }	 
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 7.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -7.0;               
+            }       
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               image { normal: "watch_dial_left_bg_ambient.png"; }
+            }
+		 }
+		 
+		 
+		 part { name: "txt.leftdial.top";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.475 0.325; to: "img.leftdial.bg"; }
+               rel2 { relative: 0.475 0.325; to: "img.leftdial.bg"; }
+               align: 0.45 0.3;
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 20;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "7";
+               }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                  	 center: "left_module_bg";
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -5.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 5.0;               
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               color: 75 225 75 255;
+            }
+         }
+         part { name: "txt.leftdial.bottom";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.475 0.7; to: "img.leftdial.bg"; }
+               rel2 { relative: 0.475 0.7; to: "img.leftdial.bg"; }
+               align: 0.5 0.75;
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 18;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "MON";
+               }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                  	 center: "left_module_bg";
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -5.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 5.0;               
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               color: 75 225 75 255;
+            }
+         }
+         
+         part { name: "txt.rightdial.top";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.475 0.325; to: "img.rightdial.bg"; }
+               rel2 { relative: 0.475 0.325; to: "img.rightdial.bg"; }
+               align: 0.45 0.3;
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 20;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "7";
+               }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                  	 center: "left_module_bg";
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 7.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -7.0;               
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               color: 75 225 75 255;
+            }
+         }
+         part { name: "txt.leftdial.bottom";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { relative: 0.475 0.7; to: "img.rightdial.bg"; }
+               rel2 { relative: 0.475 0.7; to: "img.rightdial.bg"; }
+               align: 0.5 0.75;
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 18;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "MON";
+               }
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                  	 center: "left_module_bg";
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+            }
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 7.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -7.0;               
+            }
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               color: 75 225 75 255;
+            }
+
+         }
+                  
+         
+         part { name: "img.watch.face"
+           	type: IMAGE; 				
+	        description { state: "default" 0.0;
+	           rel1 { relative: 0.0 0.0; }
+	           rel2 { relative: 1.0 1.0; }
+	           color: 255 255 0 255;
+	           min: 360 360;
+	           max: 360 360;
+	           image { normal: "watch_face_bg.png"; }
+	           
+	        }	 
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               image { normal: "watch_face_bg_ambient.png"; }
+            }
+            description { state: "ambient_lowbat" 0.0;
+               inherit: "default" 0.0;
+               image { normal: "watch_face_bg_ambient_low_battery.png"; }
+            }
+		 }
+         
+         
+     }
+         
+         
+	 programs {
+       program
+       {
+       		name: "jiggle";
+   			signal: "mouse,clicked,1";
+       		source: "*";
+       		action: STATE_SET "jiggle" 0.0;
+       		target: "img.rightdial.bg";
+       		target: "txt.rightdial.top";
+       		target: "txt.rightdial.bottom";
+       		target: "img.leftdial.bg";
+       		target: "txt.leftdial.top";
+       		target: "txt.leftdial.bottom";
+	      	transition: SPRING 1.0 2.5 2;
+       		after: "jiggle_back";
+       }
+       program
+       {
+       		name: "jiggle_back";
+   			signal: "jiggle_back";
+       		source: "*";
+       		action: STATE_SET "jiggle_back" 0.0;
+       		target: "img.rightdial.bg";
+       		target: "txt.rightdial.top";
+       		target: "txt.rightdial.bottom";
+       		target: "img.leftdial.bg";
+       		target: "txt.leftdial.top";
+       		target: "txt.leftdial.bottom";
+	      	transition: SPRING 1.0 2.5 2;
+       		after: "reset_jiggle";
+       }
+       program
+       {
+       		name: "reset_jiggle";
+       		signal: "reset_jiggle";
+       		source: "*";
+       		action: STATE_SET "default" 0.0;
+       		target: "img.rightdial.bg";
+       		target: "txt.rightdial.top";
+       		target: "txt.rightdial.bottom";
+       		target: "img.leftdial.bg";
+       		target: "txt.leftdial.top";
+       		target: "txt.leftdial.bottom";
+	      	transition: SPRING 2.0 2.0 4;
+       		
+       }
+	   program 
+	   { 
+	      name: "set_ambient";
+	      signal: "set_ambient";
+	      source: "*";
+	      action: STATE_SET "ambient" 0.0;
+	      target: "left_module_bg";
+	      target: "txt.day.txt";
+	      target: "txt.day.num";
+	      target: "left_module_fg";
+	      transition: LINEAR 0.0;
+	   }
+	   program 
+	   { 
+	      name: "set_default";
+	      signal: "set_default";
+	      source: "*";
+	      action: STATE_SET "default" 0.0;
+	      target: "left_module_bg";
+	      target: "txt.day.txt";
+	      target: "txt.day.num";
+	      target: "left_module_fg";
+	      transition: LINEAR 0.0;
+	   }
+      }
+   } 
+           
+   
+   ////////////////////////////////////////////////////////////////
+   // END NEW SINGULAR FACE
+   ////////////////////////////////////////////////////////////////
+           
+           
+           
+           
+           
+   
    group {
    	  name: "layout_module_steps";
       parts {
