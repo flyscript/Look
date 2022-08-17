@@ -318,8 +318,10 @@ collections {
    group {
       name: "layout_watch_face";
       parts {
-         part { name: "img.watch.bg"
-           	type: IMAGE; 				
+      
+      // Core Part
+         part { name: "box.watch.bg"
+           	type: BOX; 				
 	        description { state: "default" 0.0;
 	           rel1 { relative: 0.0 0.0; }
 	           rel2 { relative: 1.0 1.0; }
@@ -330,16 +332,29 @@ collections {
 	        }
 		 }
 		 
+		 // Left Dial
          part { name: "img.leftdial.bg"
            	type: IMAGE; 				
 	        description { state: "default" 0.0;
-	           rel1 { relative: 0.0 0.0; }
-	           rel2 { relative: 1.0 1.0; }
-	           color: 255 255 0 255;
+	           rel1 { offset: 30 30; to: "box.watch.bg";  }
+	           rel2 { offset: 30 30; to: "box.watch.bg";  }
+	           color: 255 255 225 255;
 	           min: 360 360;
 	           max: 360 360;
-	           image { normal: "watch_dial_left_bg.png"; }
-	           
+	           image { normal: "watch_dial_left_bg.png"; }	           
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                  	 center: "box.watch.bg";
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
 	        }	 
             description { state: "jiggle" 0.0;
                inherit: "default" 0.0;
@@ -354,38 +369,11 @@ collections {
                image { normal: "watch_dial_left_bg_ambient.png"; }
             }
 		 }
-		 
-         part { name: "img.rightdial.bg"
-           	type: IMAGE; 				
-	        description { state: "default" 0.0;
-	           rel1 { relative: 0.0 0.0; }
-	           rel2 { relative: 1.0 1.0; }
-	           color: 255 255 0 255;
-	           min: 360 360;
-	           max: 360 360;
-	           image { normal: "watch_dial_right_bg.png"; }
-	           
-	        }	 
-            description { state: "jiggle" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: 7.0;               
-            }
-            description { state: "jiggle_back" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: -7.0;               
-            }       
-            description { state: "ambient" 0.0;
-               inherit: "default" 0.0;
-               image { normal: "watch_dial_left_bg_ambient.png"; }
-            }
-		 }
-		 
-		 
 		 part { name: "txt.leftdial.top";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.475 0.325; to: "img.leftdial.bg"; }
-               rel2 { relative: 0.475 0.325; to: "img.leftdial.bg"; }
+               rel1 { relative: 0.075 0.475; to: "img.leftdial.bg"; }
+               rel2 { relative: 0.075 0.475; to: "img.leftdial.bg"; }
                align: 0.45 0.3;
                color: 255 255 255 255;
                text {
@@ -402,7 +390,7 @@ collections {
                   perspective_on: 1;
                   rotation
                   {
-                  	 center: "left_module_bg";
+                  	 center: "img.leftdial.bg";
                      z: 0;
                      x: 0;
                      y: 0;
@@ -425,8 +413,8 @@ collections {
          part { name: "txt.leftdial.bottom";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.475 0.7; to: "img.leftdial.bg"; }
-               rel2 { relative: 0.475 0.7; to: "img.leftdial.bg"; }
+               rel1 { relative: 0.075 0.57; to: "img.leftdial.bg"; }
+               rel2 { relative: 0.075 0.57; to: "img.leftdial.bg"; }
                align: 0.5 0.75;
                color: 255 255 255 255;
                text {
@@ -443,7 +431,7 @@ collections {
                   perspective_on: 1;
                   rotation
                   {
-                  	 center: "left_module_bg";
+                  	 center: "img.leftdial.bg";
                      z: 0;
                      x: 0;
                      y: 0;
@@ -464,11 +452,49 @@ collections {
             }
          }
          
+                  
+		 // Right Dial
+         part { name: "img.rightdial.bg"
+           	type: IMAGE; 				
+	        description { state: "default" 0.0;
+	           rel1 { offset: 30 30; to: "box.watch.bg";  }
+	           rel2 { offset: 30 30; to: "box.watch.bg";  }
+	           color: 255 255 255 255;
+	           min: 360 360;
+	           max: 360 360;
+	           image { normal: "watch_dial_right_bg.png"; }	           
+               map
+               {
+                  on: 1;
+                  smooth: 1;
+                  perspective_on: 1;
+                  rotation
+                  {
+                  	 center: "box.watch.bg";
+                     z: 0;
+                     x: 0;
+                     y: 0;
+                  }
+               }
+	        }	 
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: 7.0;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               map.rotation.z: -7.0;               
+            }       
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+               image { normal: "watch_dial_right_bg_ambient.png"; }
+            }
+		 }
          part { name: "txt.rightdial.top";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.475 0.325; to: "img.rightdial.bg"; }
-               rel2 { relative: 0.475 0.325; to: "img.rightdial.bg"; }
+               rel1 { relative: 0.925 0.475; to: "img.rightdial.bg"; }
+               rel2 { relative: 0.925 0.475; to: "img.rightdial.bg"; }
                align: 0.45 0.3;
                color: 255 255 255 255;
                text {
@@ -485,7 +511,7 @@ collections {
                   perspective_on: 1;
                   rotation
                   {
-                  	 center: "left_module_bg";
+                  	 center: "img.rightdial.bg";
                      z: 0;
                      x: 0;
                      y: 0;
@@ -505,11 +531,11 @@ collections {
                color: 75 225 75 255;
             }
          }
-         part { name: "txt.leftdial.bottom";
+         part { name: "txt.rightdial.bottom";
             type: TEXT;
             description { state: "default" 0.0;
-               rel1 { relative: 0.475 0.7; to: "img.rightdial.bg"; }
-               rel2 { relative: 0.475 0.7; to: "img.rightdial.bg"; }
+               rel1 { relative: 0.925 0.57; to: "img.rightdial.bg"; }
+               rel2 { relative: 0.925 0.57; to: "img.rightdial.bg"; }
                align: 0.5 0.75;
                color: 255 255 255 255;
                text {
@@ -526,7 +552,7 @@ collections {
                   perspective_on: 1;
                   rotation
                   {
-                  	 center: "left_module_bg";
+                  	 center: "img.rightdial.bg";
                      z: 0;
                      x: 0;
                      y: 0;
@@ -547,8 +573,223 @@ collections {
             }
 
          }
-                  
          
+         
+		 
+		 // Counter
+		 parts {
+         part { name: "img.counter0.bg"
+           	type: IMAGE; 				
+	        description { state: "default" 0.0;
+	           rel1 { offset: 141 250; to: "box.watch.bg"; }
+	           rel2 { offset: 141 250; to: "box.watch.bg"; }
+	           color: 255 255 255 255;
+	           min: 360 360;
+	           max: 360 360;
+	           image { normal: "dial_bg_1.png"; }
+	           
+	        }	 
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               rel1.offset.y: 240;    
+               rel2.offset.y: 240;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               rel1.offset.x: 245;    
+               rel2.offset.x: 245;              
+            }       
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+	           color: 0 0 0 255;
+            }
+		 }
+         part { name: "txt.counter0.num";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { offset: 4 2; to: "img.counter0.bg"; }
+               rel2 { offset: 4 2; to: "img.counter0.bg"; }
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 20;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "0";
+               }
+            }
+         }
+         
+         part { name: "img.counter1.bg"
+           	type: IMAGE; 				
+	        description { state: "default" 0.0;
+	           rel1 { offset: 157 230; to: "box.watch.bg"; }
+	           rel2 { offset: 157 230; to: "box.watch.bg"; }
+	           color: 255 255 255 255;
+	           min: 360 360;
+	           max: 360 360;
+	           image { normal: "dial_bg_1.png"; }
+	           
+	        }	 
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               rel1.offset.y: 240;    
+               rel2.offset.y: 240;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               rel1.offset.y: 235;    
+               rel2.offset.y: 235;              
+            }       
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+	           color: 0 0 0 255;
+            }
+		 }
+         part { name: "txt.counter1.num";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { offset: 4 42; to: "img.counter1.bg"; }
+               rel2 { offset: 4 42; to: "img.counter1.bg"; }
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 20;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "0";
+               }
+            }
+         }
+
+         part { name: "img.counter2.bg"
+           	type: IMAGE; 				
+	        description { state: "default" 0.0;
+	           rel1 { offset: 173 250; to: "box.watch.bg"; }
+	           rel2 { offset: 173 250; to: "box.watch.bg"; }
+	           color: 255 255 255 255;
+	           min: 360 360;
+	           max: 360 360;
+	           image { normal: "dial_bg_2.png"; }
+	           
+	        }	 
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               rel1.offset.y: 230;    
+               rel2.offset.y: 230;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               rel1.offset.x: 240;    
+               rel2.offset.x: 240;              
+            }       
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+	           color: 0 0 0 255;
+            }
+		 }
+         part { name: "txt.counter2.num";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { offset: 4 2; to: "img.counter2.bg"; }
+               rel2 { offset: 4 2; to: "img.counter2.bg"; }
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 20;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "0";
+               }
+            }
+         }
+         
+         part { name: "img.counter3.bg"
+           	type: IMAGE; 				
+	        description { state: "default" 0.0;
+	           rel1 { offset: 189 230; to: "box.watch.bg"; }
+	           rel2 { offset: 189 230; to: "box.watch.bg"; }
+	           color: 255 255 255 255;
+	           min: 360 360;
+	           max: 360 360;
+	           image { normal: "dial_bg_2.png"; }
+	           
+	        }	 
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               rel1.offset.y: 250;    
+               rel2.offset.y: 250;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               rel1.offset.y: 240;    
+               rel2.offset.y: 240;              
+            }       
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+	           color: 0 0 0 255;
+            }
+		 }
+         part { name: "txt.counter3.num";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { offset: 4 42; to: "img.counter3.bg"; }
+               rel2 { offset: 4 42; to: "img.counter3.bg"; }
+               color: 255 255 255 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 20;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "0";
+               }
+            }
+         }
+         
+         part { name: "img.counter4.bg"
+           	type: IMAGE; 				
+	        description { state: "default" 0.0;
+	           rel2 { offset: 205 230; to: "box.watch.bg"; }
+	           rel1 { offset: 205 230; to: "box.watch.bg"; }
+	           color: 255 255 255 255;
+	           min: 360 360;
+	           max: 360 360;
+	           image { normal: "dial_bg_white.png"; }
+	           
+	        }	 
+            description { state: "jiggle" 0.0;
+               inherit: "default" 0.0;
+               rel1.offset.y: 215;    
+               rel2.offset.y: 215;               
+            }
+            description { state: "jiggle_back" 0.0;
+               inherit: "default" 0.0;
+               rel1.offset.y: 245;    
+               rel2.offset.y: 245;              
+            }       
+            description { state: "ambient" 0.0;
+               inherit: "default" 0.0;
+	           color: 0 0 0 255;
+            }
+		 }
+         part { name: "txt.counter4.num";
+            type: TEXT;
+            description { state: "default" 0.0;
+               rel1 { offset: 4 42; to: "img.counter4.bg"; }
+               rel2 { offset: 4 42; to: "img.counter4.bg"; }
+               color: 0 0 0 255;
+               text {
+                  font: "Tizen:style=Regular";
+                  size: 20;
+                  min: 1 1;
+                  ellipsis: -1;
+                  text: "0";
+               }
+            }
+         }
+ 
+                  
+         // Main Watch Face
          part { name: "img.watch.face"
            	type: IMAGE; 				
 	        description { state: "default" 0.0;
@@ -569,6 +810,8 @@ collections {
                image { normal: "watch_face_bg_ambient_low_battery.png"; }
             }
 		 }
+		        
+      }
          
          
      }
@@ -587,6 +830,11 @@ collections {
        		target: "img.leftdial.bg";
        		target: "txt.leftdial.top";
        		target: "txt.leftdial.bottom";
+       		target: "img.counter0.bg";
+       		target: "img.counter1.bg";
+       		target: "img.counter2.bg";
+       		target: "img.counter3.bg";
+       		target: "img.counter4.bg";
 	      	transition: SPRING 1.0 2.5 2;
        		after: "jiggle_back";
        }
@@ -602,6 +850,11 @@ collections {
        		target: "img.leftdial.bg";
        		target: "txt.leftdial.top";
        		target: "txt.leftdial.bottom";
+       		target: "img.counter0.bg";
+       		target: "img.counter1.bg";
+       		target: "img.counter2.bg";
+       		target: "img.counter3.bg";
+       		target: "img.counter4.bg";
 	      	transition: SPRING 1.0 2.5 2;
        		after: "reset_jiggle";
        }
@@ -617,6 +870,11 @@ collections {
        		target: "img.leftdial.bg";
        		target: "txt.leftdial.top";
        		target: "txt.leftdial.bottom";
+       		target: "img.counter0.bg";
+       		target: "img.counter1.bg";
+       		target: "img.counter2.bg";
+       		target: "img.counter3.bg";
+       		target: "img.counter4.bg";
 	      	transition: SPRING 2.0 2.0 4;
        		
        }
@@ -626,10 +884,13 @@ collections {
 	      signal: "set_ambient";
 	      source: "*";
 	      action: STATE_SET "ambient" 0.0;
-	      target: "left_module_bg";
-	      target: "txt.day.txt";
-	      target: "txt.day.num";
-	      target: "left_module_fg";
+   		  target: "img.rightdial.bg";
+       	  target: "txt.rightdial.top";
+       	  target: "txt.rightdial.bottom";
+       	  target: "img.leftdial.bg";
+       	  target: "txt.leftdial.top";
+       	  target: "txt.leftdial.bottom";
+       	  target: "img.watch.face";
 	      transition: LINEAR 0.0;
 	   }
 	   program 
@@ -652,564 +913,5 @@ collections {
    // END NEW SINGULAR FACE
    ////////////////////////////////////////////////////////////////
            
-           
-           
-           
-           
    
-   group {
-   	  name: "layout_module_steps";
-      parts {
-         part { name: "txt.0.num";
-            type: TEXT;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.5 0.5; }
-               rel2 { relative: 0.5 0.5; }
-               color: 255 255 255 255;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 20;
-                  min: 1 1;
-                  ellipsis: -1;
-                  text: "0";
-               }
-            }
-         }
-         part { name: "txt.1.num";
-            type: TEXT;
-            description { state: "default" 0.0;
-               rel1 { relative: 2.15 0.5; to: "txt.0.num"; }
-               rel2 { relative: 2.15 0.5; to: "txt.0.num"; }
-               align: 0.5 0.5;
-               color: 255 255 255 255;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 20;
-                  min: 1 1;
-                  ellipsis: -1;
-                  text: "6";
-               }
-            }
-         }  
-         part { name: "txt.2.num";
-            type: TEXT;
-            description { state: "default" 0.0;
-               rel1 { relative: 2.15 0.5; to: "txt.1.num"; }
-               rel2 { relative: 2.15 0.5; to: "txt.1.num"; }
-               align: 0.5 0.5;
-               color: 255 255 255 255;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 20;
-                  min: 1 1;
-                  ellipsis: -1;
-                  text: "9";
-               }
-            }
-         }  
-         part { name: "txt.3.num";
-            type: TEXT;
-            description { state: "default" 0.0;
-               rel1 { relative: 2.15 0.5; to: "txt.2.num"; }
-               rel2 { relative: 2.15 0.5; to: "txt.2.num"; }
-               align: 0.5 0.5;
-               color: 255 255 255 255;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 20;
-                  min: 1 1;
-                  ellipsis: -1;
-                  text: "6";
-               }
-            }
-         }  
-         part { name: "txt.4.num";
-            type: TEXT;
-            description { state: "default" 0.0;
-               rel1 { relative: 2.15 0.5; to: "txt.3.num"; }
-               rel2 { relative: 2.15 0.5; to: "txt.3.num"; }
-               align: 0.5 0.5;
-               color: 0 0 0 255;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 20;
-                  min: 1 1;
-                  ellipsis: -1;
-                  text: "9";
-               }
-            }
-         }         
-      }
-   }
-   
-   group {
-   	  name: "layout_module_left";
-      images {
-         image: "watch_left_module_bg.png" COMP;
-         image: "watch_left_module_bg_ambient.png" COMP;
-         image: "watch_left_module_fg.png" COMP;
-      }
-      parts {
-         part { name: "left_module_bg";
-            type: IMAGE;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.5 0.5; }
-               rel2 { relative: 0.5 0.5; }
-               min: 100 100;
-               max: 100 100;
-               image { normal: "watch_left_module_bg.png"; }
-               map
-               {
-                  on: 1;
-                  smooth: 1;
-                  perspective_on: 1;
-                  rotation
-                  {
-                     z: 0;
-                     x: 0;
-                     y: 0;
-                  }
-               }
-            }
-            description { state: "jiggle" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: -5.0;               
-            }
-            description { state: "jiggle_back" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: 5.0;               
-            }
-            description { state: "ambient" 0.0;
-               inherit: "default" 0.0;
-               image { normal: "watch_left_module_bg_ambient.png"; }
-            }
-         }
-         part { name: "txt.day.num";
-            type: TEXT;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.475 0.325; to: "left_module_bg"; }
-               rel2 { relative: 0.475 0.325; to: "left_module_bg"; }
-               align: 0.45 0.3;
-               color: 255 255 255 255;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 20;
-                  min: 1 1;
-                  ellipsis: -1;
-                  text: "7";
-               }
-               map
-               {
-                  on: 1;
-                  smooth: 1;
-                  perspective_on: 1;
-                  rotation
-                  {
-                  	 center: "left_module_bg";
-                     z: 0;
-                     x: 0;
-                     y: 0;
-                  }
-               }
-            }
-            description { state: "jiggle" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: -5.0;               
-            }
-            description { state: "jiggle_back" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: 5.0;               
-            }
-            description { state: "ambient" 0.0;
-               inherit: "default" 0.0;
-               color: 75 225 75 255;
-            }
-         }
-         part { name: "txt.day.txt";
-            type: TEXT;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.475 0.7; to: "left_module_bg"; }
-               rel2 { relative: 0.475 0.7; to: "left_module_bg"; }
-               align: 0.5 0.75;
-               color: 255 255 255 255;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 18;
-                  min: 1 1;
-                  ellipsis: -1;
-                  text: "MON";
-               }
-               map
-               {
-                  on: 1;
-                  smooth: 1;
-                  perspective_on: 1;
-                  rotation
-                  {
-                  	 center: "left_module_bg";
-                     z: 0;
-                     x: 0;
-                     y: 0;
-                  }
-               }
-            }
-            description { state: "jiggle" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: -5.0;               
-            }
-            description { state: "jiggle_back" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: 5.0;               
-            }
-            description { state: "ambient" 0.0;
-               inherit: "default" 0.0;
-               color: 75 225 75 255;
-            }
-         }
-         part { name: "left_module_fg";
-            type: IMAGE;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.5 0.5; to: "left_module_bg"; }
-               rel2 { relative: 0.5 0.5; to: "left_module_bg"; }
-               min: 100 100;
-               max: 100 100;
-               image { normal: "watch_left_module_fg.png"; }
-               map
-               {
-                  on: 1;
-                  smooth: 1;
-                  perspective_on: 1;
-                  rotation
-                  {
-                     z: 0;
-                     x: 0;
-                     y: 0;
-                  }
-               }
-            }
-            description { state: "ambient" 0.0;
-               inherit: "default" 0.0;
-               color: 0 0 0 0;
-            }
-         }
-      }
-      programs {
-       program
-       {
-       		name: "jiggle";
-   			signal: "mouse,clicked,1";
-       		source: "*";
-       		action: STATE_SET "jiggle" 0.0;
-       		target: "left_module_bg";
-	      	target: "txt.day.txt";
-	      	target: "txt.day.num";
-	      	transition: SPRING 1.0 2.5 2;
-       		after: "jiggle_back";
-       }
-       program
-       {
-       		name: "jiggle_back";
-   			signal: "jiggle_back";
-       		source: "*";
-       		action: STATE_SET "jiggle_back" 0.0;
-       		target: "left_module_bg";
-	      	target: "txt.day.txt";
-	      	target: "txt.day.num";
-	      	transition: SPRING 1.0 2.5 2;
-       		after: "reset_jiggle";
-       }
-       program
-       {
-       		name: "reset_jiggle";
-       		signal: "reset_jiggle";
-       		source: "*";
-       		action: STATE_SET "default" 0.0;
-       		target: "left_module_bg";
-	      	target: "txt.day.txt";
-	      	target: "txt.day.num";
-	      	transition: SPRING 2.0 2.0 4;
-       		
-       }
-	   program 
-	   { 
-	      name: "set_ambient";
-	      signal: "set_ambient";
-	      source: "*";
-	      action: STATE_SET "ambient" 0.0;
-	      target: "left_module_bg";
-	      target: "txt.day.txt";
-	      target: "txt.day.num";
-	      target: "left_module_fg";
-	      transition: LINEAR 0.0;
-	   }
-	   program 
-	   { 
-	      name: "set_default";
-	      signal: "set_default";
-	      source: "*";
-	      action: STATE_SET "default" 0.0;
-	      target: "left_module_bg";
-	      target: "txt.day.txt";
-	      target: "txt.day.num";
-	      target: "left_module_fg";
-	      transition: LINEAR 0.0;
-	   }
-      }
-   } 
-   
-   group {
-   	  name: "layout_module_right";
-      images {
-         image: "watch_right_module_bg.png" COMP;
-         image: "watch_right_module_bg_ambient.png" COMP;
-         image: "watch_right_module_fg.png" COMP;
-      }
-      parts {
-         part { name: "right_module_bg";
-            type: IMAGE;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.5 0.5; }
-               rel2 { relative: 0.5 0.5; }
-               min: 100 100;
-               max: 100 100;
-               image { normal: "watch_right_module_bg.png"; }
-               map
-               {
-                  on: 1;
-                  smooth: 1;
-                  perspective_on: 1;
-                  rotation
-                  {
-                     z: 0;
-                     x: 0;
-                     y: 0;
-                  }
-               }
-            }
-            description { state: "jiggle" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: 5.0;               
-            }
-            description { state: "jiggle_back" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: -5.0;               
-            }
-            description { state: "ambient" 0.0;
-               inherit: "default" 0.0;
-               image { normal: "watch_right_module_bg_ambient.png"; }
-            }
-         }
-         part { name: "txt.heartrate.num";
-            type: TEXT;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.475 0.325; to: "right_module_bg"; }
-               rel2 { relative: 0.475 0.325; to: "right_module_bg"; }
-               align: 0.45 0.3;
-               color: 255 255 255 255;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 20;
-                  min: 1 1;
-                  ellipsis: -1;
-                  text: "70";
-               }
-               map
-               {
-                  on: 1;
-                  smooth: 1;
-                  perspective_on: 1;
-                  rotation
-                  {
-                  	 center: "right_module_bg";
-                     z: 0;
-                     x: 0;
-                     y: 0;
-                  }
-               }
-            }
-            description { state: "jiggle" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: 0.4;               
-            }
-            description { state: "jiggle" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: 5.0;               
-            }
-            description { state: "jiggle_back" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: -5.0;               
-            }
-            description { state: "ambient" 0.0;
-               inherit: "default" 0.0;
-               color: 75 225 75 255;
-            }
-         }
-         part { name: "txt.heartrate.txt";
-            type: TEXT;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.475 0.7; to: "right_module_bg"; }
-               rel2 { relative: 0.475 0.7; to: "right_module_bg"; }
-               align: 0.5 0.75;
-               color: 255 255 255 255;
-               text {
-                  font: "Tizen:style=Regular";
-                  size: 18;
-                  min: 1 1;
-                  ellipsis: -1;
-                  text: "BPM";
-               }
-               map
-               {
-                  on: 1;
-                  smooth: 1;
-                  perspective_on: 1;
-                  rotation
-                  {
-                  	 center: "right_module_bg";
-                     z: 0;
-                     x: 0;
-                     y: 0;
-                  }
-               }
-            }
-            description { state: "jiggle" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: 5.0;               
-            }
-            description { state: "jiggle_back" 0.0;
-               inherit: "default" 0.0;
-               map.rotation.z: -5.0;               
-            }
-            description { state: "ambient" 0.0;
-               inherit: "default" 0.0;
-               color: 75 225 75 255;
-            }
-         }
-         part { name: "right_module_fg";
-            type: IMAGE;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.5 0.5; to: "right_module_bg"; }
-               rel2 { relative: 0.5 0.5; to: "right_module_bg"; }
-               min: 100 100;
-               max: 100 100;
-               image { normal: "watch_right_module_fg.png"; }
-               map
-               {
-                  on: 1;
-                  smooth: 1;
-                  perspective_on: 1;
-                  rotation
-                  {
-                     z: 0;
-                     x: 0;
-                     y: 0;
-                  }
-               }
-            }
-            description { state: "ambient" 0.0;
-               inherit: "default" 0.0;
-               color: 0 0 0 0;
-            }
-         }
-      }
-      programs {
-       program
-       {
-       		name: "jiggle";
-   			signal: "mouse,clicked,1";
-       		source: "*";
-       		action: STATE_SET "jiggle" 0.0;
-       		target: "right_module_bg";
-	      	target: "txt.heartrate.num";
-	      	target: "txt.heartrate.txt";
-	      	transition: SPRING 1.0 2.5 2;
-       		after: "jiggle_back";
-       }
-       program
-       {
-       		name: "jiggle_back";
-   			signal: "jiggle_back";
-       		source: "*";
-       		action: STATE_SET "jiggle_back" 0.0;
-       		target: "right_module_bg";
-	      	target: "txt.heartrate.num";
-	      	target: "txt.heartrate.txt";
-	      	transition: SPRING 1.0 2.5 2;
-       		after: "reset_jiggle";
-       }
-       program
-       {
-       		name: "reset_jiggle";
-       		signal: "reset_jiggle";
-       		source: "*";
-       		action: STATE_SET "default" 0.0;
-       		target: "right_module_bg";
-	      	target: "txt.heartrate.num";
-	      	target: "txt.heartrate.txt";
-	      	transition: SPRING 2.0 2.0 4;
-       		
-       }
-	   program 
-	   { 
-	      name: "set_ambient";
-	      signal: "set_ambient";
-	      source: "*";
-	      action: STATE_SET "ambient" 0.0;
-	      target: "right_module_bg";
-	      target: "txt.heartrate.num";
-	      target: "txt.heartrate.txt";
-	      target: "right_module_fg";
-	      transition: LINEAR 0.0;
-	   }
-	   program 
-	   { 
-	      name: "set_default";
-	      signal: "set_default";
-	      source: "*";
-	      action: STATE_SET "default" 0.0;
-	      target: "right_module_bg";
-	      target: "txt.heartrate.num";
-	      target: "txt.heartrate.txt";
-	      target: "right_module_fg";
-	      transition: LINEAR 0.0;
-	   }
-      }
-   } //group end
-   
-   /*
-   group { name: "layout_module_month";
-      images {
-         image: "watch_calendar_module_month.png" COMP;
-      }
-      parts {
-         part { name: "day_bg";
-            type: IMAGE;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.0 0.0; }
-               rel2 { relative: 1.0 1.0; }
-               min: 128 128;
-               max: 128 128;
-               image { normal: "watch_calendar_module_month.png"; }
-            }
-         }
-      } //parts end
-   } //group end
-   group { name: "layout_module_weekday";
-      images {
-         image: "watch_calendar_module_day.png" COMP;
-      }
-      parts {
-         part { name: "day_bg";
-            type: IMAGE;
-            description { state: "default" 0.0;
-               rel1 { relative: 0.0 0.0; }
-               rel2 { relative: 1.0 1.0; }
-               min: 128 128;
-               max: 128 128;
-               image { normal: "watch_calendar_module_day.png"; }
-            }
-         }
-      } //parts end
-   } //group end
-   */
 } //collections end
